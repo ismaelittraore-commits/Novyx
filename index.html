@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Novyx - Streaming</title>
     <!-- Tailwind CSS CDN -->
-    <script src="[https://cdn.tailwindcss.com](https://cdn.tailwindcss.com)"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
             darkMode: 'class',
@@ -22,9 +22,9 @@
         }
     </script>
     <!-- FontAwesome for Icons -->
-    <link rel="stylesheet" href="[https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css](https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css)">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        @import url('[https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap](https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap)');
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap');
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
             background-color: #0b0d12;
@@ -130,7 +130,7 @@
             <!-- Hero Banner Section -->
             <div id="heroBannerContainer" class="relative w-full h-[75vh] md:h-[80vh] flex items-end">
                 <!-- Fallback background while loading -->
-                <div class="absolute inset-0 bg-cover bg-center transition-all duration-700" style="background-image: url('[https://placehold.co/1920x1080/151922/f3c65d?text=Novyx+Streaming](https://placehold.co/1920x1080/151922/f3c65d?text=Novyx+Streaming)');">
+                <div class="absolute inset-0 bg-cover bg-center transition-all duration-700" style="background-image: url('https://placehold.co/1920x1080/151922/f3c65d?text=Novyx+Streaming');">
                     <div class="absolute inset-0 bg-gradient-to-t from-[#0b0d12] via-[#0b0d12]/40 to-transparent"></div>
                     <div class="absolute inset-0 bg-gradient-to-r from-[#0b0d12] via-transparent to-transparent"></div>
                 </div>
@@ -359,23 +359,21 @@
 
     <!-- JavaScript Application Logic -->
     <script>
-        const TMDB_API_KEY = "8265bd1679663a7ea12ac168da84d2e8"; // Public TMDB sample key
-        const TMDB_BASE_URL = "[https://api.themoviedb.org/3](https://api.themoviedb.org/3)";
-        const IMG_BASE = "[https://image.tmdb.org/t/p/original](https://image.tmdb.org/t/p/original)";
-        const IMG_POSTER = "[https://image.tmdb.org/t/p/w500](https://image.tmdb.org/t/p/w500)";
+        const TMDB_API_KEY = "8265bd1679663a7ea12ac168da84d2e8";
+        const TMDB_BASE_URL = "https://api.themoviedb.org/3";
+        const IMG_BASE = "https://image.tmdb.org/t/p/original";
+        const IMG_POSTER = "https://image.tmdb.org/t/p/w500";
         
-        // Base Embed URL (Mis à jour vers vidsrc.cc)
-        const BASE_EMBED_URL = "[https://vidsrc.cc/embed](https://vidsrc.cc/embed)";
+        const BASE_EMBED_URL = "https://vidsrc.cc/embed";
 
         let heroMovies = [];
         let currentHeroIndex = 0;
         let heroInterval = null;
 
-        let activeMedia = null; // Currently selected media details
+        let activeMedia = null;
         let selectedSeason = 1;
         let selectedEpisode = 1;
 
-        // Watched ad tracking: keys like "movie_550" or "tv_1396_s1_e1"
         let watchedAds = JSON.parse(localStorage.getItem('novyx_ads') || "{}");
         let favorites = JSON.parse(localStorage.getItem('novyx_favorites') || "[]");
         let history = JSON.parse(localStorage.getItem('novyx_history') || "[]");
@@ -404,7 +402,6 @@
             document.querySelectorAll('.view-section').forEach(el => el.classList.add('hidden'));
             document.getElementById(`view-${tabName}`).classList.remove('hidden');
 
-            // Highlight sidebar
             ['home', 'movies', 'series', 'favorites', 'history'].forEach(t => {
                 const btn = document.getElementById(`nav-${t}`);
                 if (btn) {
@@ -442,7 +439,7 @@
             const releaseDate = item.release_date || item.first_air_date || "";
             const year = releaseDate ? releaseDate.split('-')[0] : "2026";
             const rating = item.vote_average ? item.vote_average.toFixed(1) : "8.5";
-            const backdropUrl = item.backdrop_path ? `${IMG_BASE}${item.backdrop_path}` : '[https://placehold.co/1920x1080/151922/f3c65d?text=Novyx](https://placehold.co/1920x1080/151922/f3c65d?text=Novyx)';
+            const backdropUrl = item.backdrop_path ? `${IMG_BASE}${item.backdrop_path}` : 'https://placehold.co/1920x1080/151922/f3c65d?text=Novyx';
 
             const container = document.getElementById('heroBannerContainer');
             container.style.backgroundImage = `url('${backdropUrl}')`;
@@ -454,7 +451,6 @@
             document.getElementById('heroGenre').innerText = isMovie ? "Film" : "Série TV";
             document.getElementById('heroOverview').innerText = item.overview || "Aucune description disponible pour le moment.";
 
-            // Action buttons
             document.getElementById('heroWatchBtn').onclick = () => triggerWatch({
                 id: item.id,
                 media_type: isMovie ? 'movie' : 'tv',
@@ -476,7 +472,6 @@
                 overview: item.overview
             });
 
-            // Update dots
             const dotsContainer = document.getElementById('heroDots');
             dotsContainer.innerHTML = heroMovies.map((_, i) => `
                 <span onclick="setHeroIndex(${i})" class="cursor-pointer transition-all duration-300 ${i === index ? 'w-8 h-2 rounded-full bg-novyxGold' : 'w-2 h-2 rounded-full bg-white/40 hover:bg-white'}"></span>
@@ -498,13 +493,11 @@
 
         async function fetchPopularCatalogs() {
             try {
-                // Popular Movies
                 const resMovies = await fetch(`${TMDB_BASE_URL}/movie/popular?api_key=${TMDB_API_KEY}&language=fr-FR`);
                 const dataMovies = await resMovies.json();
                 renderMediaGrid(dataMovies.results, 'popularMoviesGrid');
                 renderMediaGrid(dataMovies.results, 'allMoviesGrid', 'movie');
 
-                // Popular Series
                 const resSeries = await fetch(`${TMDB_BASE_URL}/tv/popular?api_key=${TMDB_API_KEY}&language=fr-FR`);
                 const dataSeries = await resSeries.json();
                 renderMediaGrid(dataSeries.results, 'popularSeriesGrid', 'tv');
@@ -521,7 +514,7 @@
             container.innerHTML = items.map(item => {
                 const isMovie = forcedType ? forcedType === 'movie' : (item.title !== undefined);
                 const title = item.title || item.name;
-                const poster = item.poster_path ? `${IMG_POSTER}${item.poster_path}` : '[https://placehold.co/500x750/151922/ffffff?text=Novyx](https://placehold.co/500x750/151922/ffffff?text=Novyx)';
+                const poster = item.poster_path ? `${IMG_POSTER}${item.poster_path}` : 'https://placehold.co/500x750/151922/ffffff?text=Novyx';
                 const rating = item.vote_average ? item.vote_average.toFixed(1) : "7.0";
                 const year = (item.release_date || item.first_air_date || "").split('-')[0] || "";
 
@@ -571,14 +564,13 @@
             const isMovie = media.media_type === 'movie';
 
             document.getElementById('detailsBackdrop').style.backgroundImage = `url('${media.backdrop_path ? IMG_BASE + media.backdrop_path : IMG_POSTER + media.poster_path}')`;
-            document.getElementById('detailsPoster').src = media.poster_path ? `${IMG_POSTER}${media.poster_path}` : '[https://placehold.co/500x750/151922/ffffff?text=Novyx](https://placehold.co/500x750/151922/ffffff?text=Novyx)';
+            document.getElementById('detailsPoster').src = media.poster_path ? `${IMG_POSTER}${media.poster_path}` : 'https://placehold.co/500x750/151922/ffffff?text=Novyx';
             document.getElementById('detailsTitle').innerText = media.title;
             document.getElementById('detailsRating').innerHTML = `<i class="fa-solid fa-star mr-1"></i> ${media.vote_average ? media.vote_average.toFixed(1) : '8.0'}`;
             document.getElementById('detailsYear').innerText = (media.release_date || "").split('-')[0] || "2026";
             document.getElementById('detailsTypeBadge').innerText = isMovie ? "Film" : "Série TV";
             document.getElementById('detailsOverview').innerText = media.overview || "Aucun synopsis disponible.";
 
-            // Favorite button state
             updateFavoriteModalIcon();
 
             const tvContainer = document.getElementById('tvSeasonsContainer');
@@ -624,7 +616,6 @@
 
         async function selectSeason(seasonNumber, tvId) {
             selectedSeason = seasonNumber;
-            // Highlight season buttons
             document.querySelectorAll('[id^="seasonBtn-"]').forEach(btn => {
                 btn.className = "px-3.5 py-2 rounded-xl text-sm font-semibold transition bg-white/5 text-gray-300 hover:bg-white/10";
             });
@@ -653,19 +644,14 @@
             const season = isMovie ? null : selectedSeason;
             const episode = isMovie ? null : selectedEpisode;
 
-            // Unique key for this specific video instance
             const adKey = isMovie ? `movie_${media.id}` : `tv_${media.id}_s${season}_e${episode}`;
 
-            // Check if ad was already watched for this exact video
             if (watchedAds[adKey]) {
-                // Skip ad directly and launch player
                 launchPlayer(media, season, episode);
             } else {
-                // Show ad modal
                 showAdModal(adKey, media, season, episode);
             }
 
-            // Save to history
             addToHistory(media);
         }
 
@@ -693,7 +679,6 @@
                     skipBtn.className = "w-full py-3.5 rounded-xl bg-novyxGold hover:bg-novyxGoldHover text-novyxDark font-bold transition shadow-lg shadow-novyxGold/25 cursor-pointer";
                     skipBtn.innerText = "Passer l'annonce et regarder";
                     skipBtn.onclick = () => {
-                        // Mark ad as watched for this video
                         watchedAds[adKey] = true;
                         localStorage.setItem('novyx_ads', JSON.stringify(watchedAds));
                         adModal.classList.add('hidden');
@@ -774,10 +759,9 @@
         }
 
         function addToHistory(media) {
-            // Remove existing if present to put at top
             history = history.filter(h => h.id !== media.id);
             history.unshift(media);
-            if (history.length > 20) history.pop(); // keep last 20
+            if (history.length > 20) history.pop();
             localStorage.setItem('novyx_history', JSON.stringify(history));
             renderHistory();
             renderContinueWatching();
@@ -835,8 +819,7 @@
                 container.innerHTML = results.map(item => {
                     const isMovie = item.media_type === 'movie';
                     const title = item.title || item.name;
-                    const poster = item.poster_path ? `${IMG_POSTER}${item.poster_path}` : '[https://placehold.co/500x750/151922/ffffff?text=Novyx](https://placehold.co/500x750/151922/ffffff?text=Novyx)';
-                    const rating = item.vote_average ? item.vote_average.toFixed(1) : "7.0";
+                    const poster = item.poster_path ? `${IMG_POSTER}${item.poster_path}` : 'https://placehold.co/500x750/151922/ffffff?text=Novyx';
 
                     const mediaObj = {
                         id: item.id,
