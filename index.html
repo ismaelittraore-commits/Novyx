@@ -129,7 +129,6 @@
         <div id="view-home" class="view-section">
             <!-- Hero Banner Section -->
             <div id="heroBannerContainer" class="relative w-full h-[75vh] md:h-[80vh] flex items-end">
-                <!-- Fallback background while loading -->
                 <div class="absolute inset-0 bg-cover bg-center transition-all duration-700" style="background-image: url('https://placehold.co/1920x1080/151922/f3c65d?text=Novyx+Streaming');">
                     <div class="absolute inset-0 bg-gradient-to-t from-[#0b0d12] via-[#0b0d12]/40 to-transparent"></div>
                     <div class="absolute inset-0 bg-gradient-to-r from-[#0b0d12] via-transparent to-transparent"></div>
@@ -164,13 +163,7 @@
                 </div>
 
                 <!-- Hero Dots Carousel Indicators -->
-                <div id="heroDots" class="absolute bottom-6 right-6 z-20 flex space-x-2">
-                    <span class="w-8 h-2 rounded-full bg-novyxGold transition-all duration-300"></span>
-                    <span class="w-2 h-2 rounded-full bg-white/40 transition-all duration-300"></span>
-                    <span class="w-2 h-2 rounded-full bg-white/40 transition-all duration-300"></span>
-                    <span class="w-2 h-2 rounded-full bg-white/40 transition-all duration-300"></span>
-                    <span class="w-2 h-2 rounded-full bg-white/40 transition-all duration-300"></span>
-                </div>
+                <div id="heroDots" class="absolute bottom-6 right-6 z-20 flex space-x-2"></div>
             </div>
 
             <!-- Continue Watching Section -->
@@ -181,9 +174,7 @@
                         <span>Continuer à regarder</span>
                     </h2>
                 </div>
-                <div id="continueWatchingGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-                    <!-- Dynamic history items -->
-                </div>
+                <div id="continueWatchingGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4"></div>
             </section>
 
             <!-- Popular Movies Section -->
@@ -195,9 +186,7 @@
                     </h2>
                     <button onclick="navigateTab('movies')" class="text-xs text-novyxGold hover:underline font-semibold">Voir tout</button>
                 </div>
-                <div id="popularMoviesGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-                    <!-- Populated by JS -->
-                </div>
+                <div id="popularMoviesGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4"></div>
             </section>
 
             <!-- Popular TV Shows Section -->
@@ -209,9 +198,7 @@
                     </h2>
                     <button onclick="navigateTab('series')" class="text-xs text-novyxGold hover:underline font-semibold">Voir tout</button>
                 </div>
-                <div id="popularSeriesGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-                    <!-- Populated by JS -->
-                </div>
+                <div id="popularSeriesGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4"></div>
             </section>
         </div>
 
@@ -290,7 +277,6 @@
                     </div>
                 </div>
 
-                <!-- TV Show Seasons Selector (Shown only for TV) -->
                 <div id="tvSeasonsContainer" class="hidden space-y-3 pt-2">
                     <label class="block text-xs uppercase tracking-wider text-gray-400 font-bold">Sélectionner la saison</label>
                     <div id="seasonsButtons" class="flex flex-wrap gap-2"></div>
@@ -313,7 +299,7 @@
         </div>
     </div>
 
-    <!-- Ad Modal (Unique Ad per Video) -->
+    <!-- Ad Modal -->
     <div id="adModal" class="fixed inset-0 bg-black/90 z-50 hidden backdrop-blur-lg flex items-center justify-center p-4">
         <div class="bg-[#151922] border border-white/10 rounded-2xl max-w-md w-full p-6 text-center space-y-6 shadow-2xl relative">
             <div class="w-16 h-16 bg-novyxGold/10 text-novyxGold rounded-full flex items-center justify-center mx-auto text-2xl border border-novyxGold/30">
@@ -323,7 +309,6 @@
                 <h3 class="text-xl font-bold text-white">Publicité Sponsorisée</h3>
                 <p class="text-sm text-gray-400">Pour soutenir Novyx et profiter de votre vidéo gratuitement, veuillez patienter quelques secondes.</p>
             </div>
-            <!-- Timer Countdown Box -->
             <div class="bg-[#0b0d12] border border-white/10 rounded-xl p-4 flex items-center justify-between">
                 <span class="text-sm text-gray-300 font-medium">Votre vidéo se lance dans :</span>
                 <span id="adTimerCount" class="text-2xl font-extrabold text-novyxGold">5s</span>
@@ -347,7 +332,10 @@
                 </div>
             </div>
             <div class="flex items-center space-x-2">
-                <button onclick="toggleFullscreen()" class="w-10 h-10 rounded-xl bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition">
+                <!-- Choix du serveur -->
+                <button onclick="switchServer('vidsrc')" id="srv-vidsrc" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-novyxGold text-novyxDark transition">VidSrc</button>
+                <button onclick="switchServer('embed2')" id="srv-embed2" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-white/10 text-gray-300 hover:bg-white/20 transition">Serveur 2</button>
+                <button onclick="toggleFullscreen()" class="w-10 h-10 rounded-xl bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition ml-2">
                     <i class="fa-solid fa-expand"></i>
                 </button>
             </div>
@@ -363,8 +351,11 @@
         const TMDB_BASE_URL = "https://api.themoviedb.org/3";
         const IMG_BASE = "https://image.tmdb.org/t/p/original";
         const IMG_POSTER = "https://image.tmdb.org/t/p/w500";
-        
-        const BASE_EMBED_URL = "https://vidsrc.cc/embed";
+
+        let currentPlayingMedia = null;
+        let currentSeason = 1;
+        let currentEpisode = 1;
+        let currentServer = 'vidsrc';
 
         let heroMovies = [];
         let currentHeroIndex = 0;
@@ -689,23 +680,61 @@
         }
 
         function launchPlayer(media, season = null, episode = null) {
-            const isMovie = media.media_type === 'movie';
-            let embedUrl = "";
+            currentPlayingMedia = media;
+            currentSeason = season || 1;
+            currentEpisode = episode || 1;
 
+            updatePlayerIframe();
+
+            const isMovie = media.media_type === 'movie';
             if (isMovie) {
-                embedUrl = `${BASE_EMBED_URL}/movie?tmdb=${media.id}`;
                 document.getElementById('playerTitle').innerText = media.title;
-                document.getElementById('playerSubtitle').innerText = "Film • Lecteur VidSrc";
+                document.getElementById('playerSubtitle').innerText = "Film • Streaming";
             } else {
-                const s = season || 1;
-                const e = episode || 1;
-                embedUrl = `${BASE_EMBED_URL}/tv?tmdb=${media.id}&s=${s}&e=${e}`;
-                document.getElementById('playerTitle').innerText = `${media.title} - S${s} E${e}`;
-                document.getElementById('playerSubtitle').innerText = "Série TV • Lecteur VidSrc";
+                document.getElementById('playerTitle').innerText = `${media.title} - S${currentSeason} E${currentEpisode}`;
+                document.getElementById('playerSubtitle').innerText = "Série TV • Streaming";
             }
 
-            document.getElementById('videoIframe').src = embedUrl;
             document.getElementById('playerModal').classList.remove('hidden');
+        }
+
+        function updatePlayerIframe() {
+            if (!currentPlayingMedia) return;
+            const isMovie = currentPlayingMedia.media_type === 'movie';
+            let url = "";
+
+            if (currentServer === 'vidsrc') {
+                if (isMovie) {
+                    url = `https://vidsrc.cc/v2/embed/movie/${currentPlayingMedia.id}`;
+                } else {
+                    url = `https://vidsrc.cc/v2/embed/tv/${currentPlayingMedia.id}/${currentSeason}/${currentEpisode}`;
+                }
+            } else {
+                // Serveur de secours (2Embed)
+                if (isMovie) {
+                    url = `https://www.2embed.cc/embed/${currentPlayingMedia.id}`;
+                } else {
+                    url = `https://www.2embed.cc/embedtv/${currentPlayingMedia.id}&s=${currentSeason}&e=${currentEpisode}`;
+                }
+            }
+
+            document.getElementById('videoIframe').src = url;
+        }
+
+        function switchServer(serverName) {
+            currentServer = serverName;
+            const btn1 = document.getElementById('srv-vidsrc');
+            const btn2 = document.getElementById('srv-embed2');
+
+            if (serverName === 'vidsrc') {
+                btn1.className = "px-3 py-1.5 rounded-lg text-xs font-bold bg-novyxGold text-novyxDark transition";
+                btn2.className = "px-3 py-1.5 rounded-lg text-xs font-bold bg-white/10 text-gray-300 hover:bg-white/20 transition";
+            } else {
+                btn2.className = "px-3 py-1.5 rounded-lg text-xs font-bold bg-novyxGold text-novyxDark transition";
+                btn1.className = "px-3 py-1.5 rounded-lg text-xs font-bold bg-white/10 text-gray-300 hover:bg-white/20 transition";
+            }
+
+            updatePlayerIframe();
         }
 
         function closePlayerModal() {
