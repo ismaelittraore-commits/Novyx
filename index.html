@@ -113,7 +113,7 @@
         </div>
 
         <div class="p-4 border-t border-white/10 text-xs text-center text-gray-500">
-            Novyx Streaming v2.6 • TMDB Powered
+            Novyx Streaming v2.7 • Multi-Servers & French Audio
         </div>
     </div>
 
@@ -317,13 +317,14 @@
                 </button>
                 <div>
                     <h3 id="playerTitle" class="text-white font-bold text-sm md:text-base line-clamp-1">Titre de la vidéo</h3>
-                    <span id="playerSubtitle" class="text-xs text-novyxGold font-medium">Lecteur VidSrc sécurisé</span>
+                    <span id="playerSubtitle" class="text-xs text-novyxGold font-medium">Lecteur HD Multilingue</span>
                 </div>
             </div>
-            <div class="flex items-center space-x-2">
-                <button onclick="switchServer('vidsrc')" id="srv-vidsrc" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-novyxGold text-novyxDark transition">VidSrc</button>
-                <button onclick="switchServer('embed2')" id="srv-embed2" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-white/10 text-gray-300 hover:bg-white/20 transition">Serveur 2</button>
-                <button onclick="switchServer('vidsrcpro')" id="srv-vidsrcpro" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-white/10 text-gray-300 hover:bg-white/20 transition">Serveur 3</button>
+            <div class="flex items-center space-x-2 overflow-x-auto py-1">
+                <button onclick="switchServer('french')" id="srv-french" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-novyxGold text-novyxDark transition whitespace-nowrap">FR (VF)</button>
+                <button onclick="switchServer('vidsrc')" id="srv-vidsrc" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-white/10 text-gray-300 hover:bg-white/20 transition whitespace-nowrap">Serveur 1</button>
+                <button onclick="switchServer('embed2')" id="srv-embed2" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-white/10 text-gray-300 hover:bg-white/20 transition whitespace-nowrap">Serveur 2</button>
+                <button onclick="switchServer('vidsrcpro')" id="srv-vidsrcpro" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-white/10 text-gray-300 hover:bg-white/20 transition whitespace-nowrap">Serveur 3</button>
                 <button onclick="toggleFullscreen()" class="w-10 h-10 rounded-xl bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition ml-2">
                     <i class="fa-solid fa-expand"></i>
                 </button>
@@ -344,7 +345,7 @@
         let currentPlayingMedia = null;
         let currentSeason = 1;
         let currentEpisode = 1;
-        let currentServer = 'vidsrc';
+        let currentServer = 'french';
 
         let heroMovies = [];
         let currentHeroIndex = 0;
@@ -678,10 +679,10 @@
             const isMovie = media.media_type === 'movie';
             if (isMovie) {
                 document.getElementById('playerTitle').innerText = media.title;
-                document.getElementById('playerSubtitle').innerText = "Film • Streaming";
+                document.getElementById('playerSubtitle').innerText = "Film • Streaming French/Multi";
             } else {
                 document.getElementById('playerTitle').innerText = `${media.title} - S${currentSeason} E${currentEpisode}`;
-                document.getElementById('playerSubtitle').innerText = "Série TV • Streaming";
+                document.getElementById('playerSubtitle').innerText = "Série TV • Streaming French/Multi";
             }
 
             document.getElementById('playerModal').classList.remove('hidden');
@@ -692,7 +693,14 @@
             const isMovie = currentPlayingMedia.media_type === 'movie';
             let url = "";
 
-            if (currentServer === 'vidsrc') {
+            if (currentServer === 'french') {
+                // Serveur Français / Multilingue (VidSrc.icu)
+                if (isMovie) {
+                    url = `https://vidsrc.icu/embed/movie/${currentPlayingMedia.id}`;
+                } else {
+                    url = `https://vidsrc.icu/embed/tv/${currentPlayingMedia.id}/${currentSeason}/${currentEpisode}`;
+                }
+            } else if (currentServer === 'vidsrc') {
                 if (isMovie) {
                     url = `https://vidsrc.xyz/embed/movie/${currentPlayingMedia.id}`;
                 } else {
@@ -717,17 +725,19 @@
 
         function switchServer(serverName) {
             currentServer = serverName;
+            const btnFr = document.getElementById('srv-french');
             const btn1 = document.getElementById('srv-vidsrc');
             const btn2 = document.getElementById('srv-embed2');
             const btn3 = document.getElementById('srv-vidsrcpro');
 
-            [btn1, btn2, btn3].forEach(btn => {
-                if (btn) btn.className = "px-3 py-1.5 rounded-lg text-xs font-bold bg-white/10 text-gray-300 hover:bg-white/20 transition";
+            [btnFr, btn1, btn2, btn3].forEach(btn => {
+                if (btn) btn.className = "px-3 py-1.5 rounded-lg text-xs font-bold bg-white/10 text-gray-300 hover:bg-white/20 transition whitespace-nowrap";
             });
 
-            if (serverName === 'vidsrc' && btn1) btn1.className = "px-3 py-1.5 rounded-lg text-xs font-bold bg-novyxGold text-novyxDark transition";
-            if (serverName === 'embed2' && btn2) btn2.className = "px-3 py-1.5 rounded-lg text-xs font-bold bg-novyxGold text-novyxDark transition";
-            if (serverName === 'vidsrcpro' && btn3) btn3.className = "px-3 py-1.5 rounded-lg text-xs font-bold bg-novyxGold text-novyxDark transition";
+            if (serverName === 'french' && btnFr) btnFr.className = "px-3 py-1.5 rounded-lg text-xs font-bold bg-novyxGold text-novyxDark transition whitespace-nowrap";
+            if (serverName === 'vidsrc' && btn1) btn1.className = "px-3 py-1.5 rounded-lg text-xs font-bold bg-novyxGold text-novyxDark transition whitespace-nowrap";
+            if (serverName === 'embed2' && btn2) btn2.className = "px-3 py-1.5 rounded-lg text-xs font-bold bg-novyxGold text-novyxDark transition whitespace-nowrap";
+            if (serverName === 'vidsrcpro' && btn3) btn3.className = "px-3 py-1.5 rounded-lg text-xs font-bold bg-novyxGold text-novyxDark transition whitespace-nowrap";
 
             updatePlayerIframe();
         }
