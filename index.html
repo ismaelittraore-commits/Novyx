@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Novyx - Streaming VF Intelligent</title>
+    <title>Novyx - Streaming</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -84,7 +84,7 @@
                 <i class="fa-solid fa-clock-rotate-left text-lg w-6"></i><span>Historique</span>
             </button>
         </div>
-        <div class="p-4 border-t border-white/10 text-xs text-center text-gray-500">Novyx • Intégrateur Intelligent</div>
+        <div class="p-4 border-t border-white/10 text-xs text-center text-gray-500">Novyx • Direct Stream</div>
     </div>
 
     <!-- Main Container -->
@@ -214,7 +214,7 @@
         </div>
     </div>
 
-    <!-- Lecteur Vidéo Intégrateur Sécurisé -->
+    <!-- Lecteur Vidéo Direct -->
     <div id="playerModal" class="fixed inset-0 bg-black z-50 hidden flex flex-col">
         <div class="bg-black/90 backdrop-blur-md px-4 py-3 flex items-center justify-between border-b border-white/10 z-10">
             <div class="flex items-center space-x-3">
@@ -223,12 +223,11 @@
                 </button>
                 <div>
                     <h3 id="playerTitle" class="text-white font-bold text-sm md:text-base line-clamp-1">Lecture en cours</h3>
-                    <span id="playerSubtitle" class="text-xs text-novyxGold font-medium">Lecteur optimisé Novyx</span>
+                    <span id="playerSubtitle" class="text-xs text-novyxGold font-medium">Flux direct VF</span>
                 </div>
             </div>
         </div>
         <div class="flex-1 w-full bg-black relative flex items-center justify-center">
-            <!-- Iframe sécurisée avec contournement et permissions de lecture -->
             <iframe id="secureVideoFrame" src="" class="w-full h-full border-none" referrerpolicy="no-referrer" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
         </div>
     </div>
@@ -239,7 +238,6 @@
         const TMDB_BASE_URL = "https://api.themoviedb.org/3";
         const IMG_BASE = "https://image.tmdb.org/t/p/original";
         const IMG_POSTER = "https://image.tmdb.org/t/p/w500";
-        const BACKEND_RENDER_URL = "https://novyx-backend.onrender.com";
 
         let activeMedia = null;
         let selectedSeason = 1;
@@ -421,7 +419,7 @@
             addToHistory(media);
         }
 
-        async function launchPlayer(media, season = null, episode = null) {
+        function launchPlayer(media, season = null, episode = null) {
             const isMovie = media.media_type === 'movie';
             const currentSeason = season || 1;
             const currentEpisode = episode || 1;
@@ -429,29 +427,12 @@
             document.getElementById('playerTitle').innerText = isMovie ? media.title : `${media.title} - S${currentSeason} E${currentEpisode}`;
             document.getElementById('playerModal').classList.remove('hidden');
 
-            fetchStreamAndPlay(media, isMovie, currentSeason, currentEpisode);
-        }
-
-        async function fetchStreamAndPlay(media, isMovie, season, episode) {
-            const type = isMovie ? 'movie' : 'tv';
-            const tmdbId = media.id;
+            // Génération directe de l'URL d'embed (sans passer par le backend)
             const iframe = document.getElementById('secureVideoFrame');
-
-            try {
-                let apiUrl = `${BACKEND_RENDER_URL}/api/source/${type}/${tmdbId}`;
-                if (!isMovie) apiUrl += `?season=${season}&episode=${episode}`;
-
-                const response = await fetch(apiUrl);
-                const data = await response.json();
-
-                if (data.success && data.primaryUrl) {
-                    iframe.src = data.primaryUrl;
-                } else {
-                    iframe.src = `https://vidsrc.xyz/embed/${type}?tmdb=${tmdbId}${!isMovie ? `&season=${season}&episode=${episode}` : ''}`;
-                }
-            } catch (error) {
-                console.error(error);
-                iframe.src = `https://vidsrc.xyz/embed/${type}?tmdb=${tmdbId}${!isMovie ? `&season=${season}&episode=${episode}` : ''}`;
+            if (isMovie) {
+                iframe.src = `https://vidsrc.xyz/embed/movie?tmdb=${media.id}`;
+            } else {
+                iframe.src = `https://vidsrc.xyz/embed/tv?tmdb=${media.id}&season=${currentSeason}&episode=${currentEpisode}`;
             }
         }
 
@@ -474,7 +455,7 @@
         function renderContinueWatching() { renderMediaGrid(history.slice(0, 5), 'continueWatchingGrid'); }
 
         function openSearchModal() { document.getElementById('searchModal').classList.remove('hidden'); }
-        function closeSearchModal() { document.getElementById('searchModal'].classList.add('hidden'); }
+        function closeSearchModal() { document.getElementById('searchModal').classList.add('hidden'); }
 
         async function performSearch(query) {
             if (!query.trim()) return;
