@@ -230,8 +230,8 @@
             </div>
         </div>
         <div class="flex-1 w-full bg-black relative flex items-center justify-center">
-            <!-- Balise vidéo HTML5 native pure (pas d'iframe) -->
-            <video id="nativeVideoPlayer" controls autoplay class="w-full h-full max-h-screen bg-black"></video>
+            <!-- Balise vidéo HTML5 native optimisée mobile -->
+            <video id="nativeVideoPlayer" controls playsinline class="w-full h-full max-h-screen bg-black"></video>
         </div>
     </div>
 
@@ -471,15 +471,15 @@
                     hlsInstance.loadSource(streamUrl);
                     hlsInstance.attachMedia(videoElement);
                     hlsInstance.on(Hls.Events.MANIFEST_PARSED, function() {
-                        videoElement.play();
+                        videoElement.play().catch(e => console.log("Attente clic utilisateur"));
                     });
                 } else if (videoElement.canPlayType('application/vnd.apple.mpegurl')) {
                     videoElement.src = streamUrl;
-                    videoElement.play();
+                    videoElement.play().catch(e => console.log("Attente clic utilisateur"));
                 }
             } else {
                 videoElement.src = streamUrl;
-                videoElement.play();
+                videoElement.play().catch(e => console.log("Attente clic utilisateur"));
             }
         }
 
