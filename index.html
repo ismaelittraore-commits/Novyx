@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Novyx - Redirection Streamzo</title>
+    <title>Novyx - Redirection Streamzo.fr</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -69,11 +69,8 @@
             <button onclick="navigateTab('series'); toggleSidebar();" id="nav-series" class="w-full flex items-center space-x-4 px-4 py-3 rounded-xl font-medium text-left text-gray-300 hover:bg-white/5 hover:text-white transition">
                 <i class="fa-solid fa-tv text-lg w-6"></i><span>Séries</span>
             </button>
-            <button onclick="navigateTab('favorites'); toggleSidebar();" id="nav-favorites" class="w-full flex items-center space-x-4 px-4 py-3 rounded-xl font-medium text-left text-gray-300 hover:bg-white/5 hover:text-white transition">
-                <i class="fa-solid fa-heart text-lg w-6"></i><span>Favoris</span>
-            </button>
         </div>
-        <div class="p-4 border-t border-white/10 text-xs text-center text-gray-500">Novyx • Redirection Directe</div>
+        <div class="p-4 border-t border-white/10 text-xs text-center text-gray-500">Novyx • Direct Streamzo.fr</div>
     </div>
 
     <!-- Main Container -->
@@ -84,15 +81,10 @@
                 <div class="relative z-10 p-6 md:p-12 max-w-3xl space-y-4">
                     <div class="inline-block text-xs uppercase tracking-widest text-novyxGold font-bold px-3 py-1 rounded bg-novyxGold/10 border border-novyxGold/30">À la une</div>
                     <h1 class="text-3xl md:text-5xl font-extrabold tracking-tight text-white leading-tight">Interstellar</h1>
-                    <div class="flex items-center space-x-4 text-sm font-semibold text-gray-300">
-                        <span class="flex items-center text-novyxGold"><i class="fa-solid fa-star mr-1.5"></i> 8.6</span>
-                        <span class="text-gray-400">2014</span>
-                        <span class="bg-white/10 px-2.5 py-0.5 rounded text-xs text-gray-200">Film</span>
-                    </div>
                     <p class="text-gray-300 text-sm md:text-base line-clamp-3 leading-relaxed">Les aventures d'un groupe d'explorateurs qui utilisent une faille dans l'espace-temps...</p>
                     <div class="flex items-center space-x-4 pt-2">
-                        <button onclick="redirectToStreamzo({id: 157336, media_type: 'movie'})" class="flex items-center space-x-3 bg-novyxGold hover:bg-novyxGoldHover text-novyxDark px-7 py-3.5 rounded-full font-bold transition shadow-lg">
-                            <i class="fa-solid fa-play"></i><span>Regarder sur Streamzo</span>
+                        <button onclick="redirectToStreamzo({id: 157336, media_type: 'movie', title: 'Interstellar'})" class="flex items-center space-x-3 bg-novyxGold hover:bg-novyxGoldHover text-novyxDark px-7 py-3.5 rounded-full font-bold transition shadow-lg">
+                            <i class="fa-solid fa-play"></i><span>Regarder</span>
                         </button>
                     </div>
                 </div>
@@ -110,18 +102,13 @@
         </div>
 
         <div id="view-movies" class="view-section hidden px-4 md:px-8 pt-6">
-            <h1 class="text-2xl font-bold mb-6 flex items-center"><i class="fa-solid fa-film text-novyxGold mr-3"></i> Tous les Films</h1>
+            <h1 class="text-2xl font-bold mb-6">Tous les Films</h1>
             <div id="allMoviesGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4"></div>
         </div>
 
         <div id="view-series" class="view-section hidden px-4 md:px-8 pt-6">
-            <h1 class="text-2xl font-bold mb-6 flex items-center"><i class="fa-solid fa-tv text-novyxGold mr-3"></i> Toutes les Séries</h1>
+            <h1 class="text-2xl font-bold mb-6">Toutes les Séries</h1>
             <div id="allSeriesGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4"></div>
-        </div>
-
-        <div id="view-favorites" class="view-section hidden px-4 md:px-8 pt-6">
-            <h1 class="text-2xl font-bold mb-6 flex items-center"><i class="fa-solid fa-heart text-novyxGold mr-3"></i> Mes Favoris</h1>
-            <div id="favoritesGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4"></div>
         </div>
     </main>
 
@@ -139,21 +126,19 @@
         </div>
     </div>
 
-    <!-- Script de redirection vers Streamzo -->
     <script>
         const IMG_POSTER = "https://image.tmdb.org/t/p/w500";
-        let favorites = JSON.parse(localStorage.getItem('novyx_favorites') || "[]");
 
         const moviesList = [
-            { id: 157336, media_type: 'movie', title: 'Interstellar', poster_path: '/gEU2QniE6E77NI6lCU6MxlNBvIx.jpg', vote_average: 8.6 },
-            { id: 550, media_type: 'movie', title: 'Fight Club', poster_path: '/pB8BM7pdSp6B6Ih7QZ4DrQ3PmJK.jpg', vote_average: 8.4 },
-            { id: 299534, media_type: 'movie', title: 'Avengers: Endgame', poster_path: '/or06FN3Dka5tukK1e9sl16pB3iy.jpg', vote_average: 8.3 },
-            { id: 27205, media_type: 'movie', title: 'Inception', poster_path: '/9gk7adHYeDvHkCSEqAvQNLV5Uge.jpg', vote_average: 8.8 }
+            { id: 157336, media_type: 'movie', title: 'Interstellar', poster_path: '/gEU2QniE6E77NI6lCU6MxlNBvIx.jpg' },
+            { id: 550, media_type: 'movie', title: 'Fight Club', poster_path: '/pB8BM7pdSp6B6Ih7QZ4DrQ3PmJK.jpg' },
+            { id: 299534, media_type: 'movie', title: 'Avengers: Endgame', poster_path: '/or06FN3Dka5tukK1e9sl16pB3iy.jpg' },
+            { id: 27205, media_type: 'movie', title: 'Inception', poster_path: '/9gk7adHYeDvHkCSEqAvQNLV5Uge.jpg' }
         ];
 
         const seriesList = [
-            { id: 1396, media_type: 'tv', title: 'Breaking Bad', poster_path: '/ggFHVNu6YYI5L9pCfOacjizRGt.jpg', vote_average: 8.9 },
-            { id: 66732, media_type: 'tv', title: 'Stranger Things', poster_path: '/49WJfeN0moxb9IPfGn8AIqMGskD.jpg', vote_average: 8.6 }
+            { id: 1396, media_type: 'tv', title: 'Breaking Bad', poster_path: '/ggFHVNu6YYI5L9pCfOacjizRGt.jpg' },
+            { id: 66732, media_type: 'tv', title: 'Stranger Things', poster_path: '/49WJfeN0moxb9IPfGn8AIqMGskD.jpg' }
         ];
 
         window.onload = function() {
@@ -161,7 +146,6 @@
             renderGrid(moviesList, 'allMoviesGrid');
             renderGrid(seriesList, 'popularSeriesGrid');
             renderGrid(seriesList, 'allSeriesGrid');
-            renderFavorites();
         };
 
         function toggleSidebar() {
@@ -195,12 +179,10 @@
             `).join('');
         }
 
-        // Fonction magique de redirection vers Streamzo
+        // Redirection ciblée vers streamzo.fr
         function redirectToStreamzo(media) {
             const type = media.media_type === 'movie' ? 'movie' : 'tv';
-            // Redirection directe vers le lecteur officiel Streamzo basé sur l'ID TMDB
-            const streamzoUrl = `https://streamzo.to/${type}/${media.id}`;
-            window.location.href = streamzoUrl;
+            window.location.href = `https://streamzo.fr/${type}/${media.id}`;
         }
 
         function openSearchModal() { document.getElementById('searchModal').classList.remove('hidden'); }
@@ -212,8 +194,6 @@
             const results = all.filter(m => m.title.toLowerCase().includes(query.toLowerCase()));
             renderGrid(results, 'searchResultsContainer');
         }
-
-        function handleSidebarSearch(e) { if (e.key === 'Enter') performSearch(e.target.value); }
     </script>
 </body>
 </html>
