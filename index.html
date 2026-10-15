@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Novyx - Streaming</title>
+    <title>Novyx - Streaming Direct</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -70,7 +70,7 @@
                 <i class="fa-solid fa-tv text-lg w-6"></i><span>Séries</span>
             </button>
         </div>
-        <div class="p-4 border-t border-white/10 text-xs text-center text-gray-500">Novyx • Streamzo Direct</div>
+        <div class="p-4 border-t border-white/10 text-xs text-center text-gray-500">Novyx • Direct Streamzo</div>
     </div>
 
     <!-- Main Container -->
@@ -83,7 +83,7 @@
                     <h1 class="text-3xl md:text-5xl font-extrabold tracking-tight text-white leading-tight">Interstellar</h1>
                     <p class="text-gray-300 text-sm md:text-base line-clamp-3 leading-relaxed">Les aventures d'un groupe d'explorateurs qui utilisent une faille dans l'espace-temps...</p>
                     <div class="flex items-center space-x-4 pt-2">
-                        <button onclick="redirectToStreamzo({title: 'Interstellar'})" class="flex items-center space-x-3 bg-novyxGold hover:bg-novyxGoldHover text-novyxDark px-7 py-3.5 rounded-full font-bold transition shadow-lg">
+                        <button onclick="redirectToStreamzo({title: 'Interstellar', media_type: 'movie'})" class="flex items-center space-x-3 bg-novyxGold hover:bg-novyxGoldHover text-novyxDark px-7 py-3.5 rounded-full font-bold transition shadow-lg">
                             <i class="fa-solid fa-play"></i><span>Regarder</span>
                         </button>
                     </div>
@@ -131,9 +131,9 @@
 
         const moviesList = [
             { id: 157336, media_type: 'movie', title: 'Interstellar', poster_path: '/gEU2QniE6E77NI6lCU6MxlNBvIx.jpg' },
+            { id: 278, media_type: 'movie', title: 'Les Évadés', poster_path: '/q6y0Go1tsGEmtA83GD1L12A8R3.jpg' },
             { id: 550, media_type: 'movie', title: 'Fight Club', poster_path: '/pB8BM7pdSp6B6Ih7QZ4DrQ3PmJK.jpg' },
-            { id: 299534, media_type: 'movie', title: 'Avengers: Endgame', poster_path: '/or06FN3Dka5tukK1e9sl16pB3iy.jpg' },
-            { id: 27205, media_type: 'movie', title: 'Inception', poster_path: '/9gk7adHYeDvHkCSEqAvQNLV5Uge.jpg' }
+            { id: 299534, media_type: 'movie', title: 'Avengers: Endgame', poster_path: '/or06FN3Dka5tukK1e9sl16pB3iy.jpg' }
         ];
 
         const seriesList = [
@@ -179,10 +179,17 @@
             `).join('');
         }
 
-        // Redirection fonctionnelle par recherche sur Streamzo
+        // Redirection directe vers la fiche du film
         function redirectToStreamzo(media) {
-            const query = encodeURIComponent(media.title);
-            window.location.href = `https://streamzo.fr/?s=${query}`;
+            const slug = media.title
+                .toLowerCase()
+                .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+                .replace(/[^a-z0-9\s-]/g, "")
+                .trim()
+                .replace(/\s+/g, "-");
+
+            const type = media.media_type === 'tv' ? 'serie' : 'film';
+            window.location.href = `https://streamzo.fr/${type}/${slug}`;
         }
 
         function openSearchModal() { document.getElementById('searchModal').classList.remove('hidden'); }
