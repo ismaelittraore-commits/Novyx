@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Novyx - Streaming Multi-Sources</title>
+    <title>Novyx - Redirection Streamzo</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -59,12 +59,6 @@
             </div>
             <button onclick="toggleSidebar()" class="text-gray-400 hover:text-white text-xl p-2"><i class="fa-solid fa-xmark"></i></button>
         </div>
-        <div class="p-4 border-b border-white/5">
-            <div class="relative">
-                <input type="text" id="sidebarSearchInput" placeholder="Rechercher un film, une série..." onkeyup="handleSidebarSearch(event)" class="w-full bg-white/5 border border-white/10 rounded-full py-2.5 pl-10 pr-4 text-sm text-white focus:outline-none focus:border-novyxGold transition">
-                <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3 text-novyxGold text-sm"></i>
-            </div>
-        </div>
         <div class="flex-1 py-4 px-3 space-y-1 overflow-y-auto">
             <button onclick="navigateTab('home'); toggleSidebar();" id="nav-home" class="w-full flex items-center space-x-4 px-4 py-3 rounded-xl font-medium text-left bg-novyxGold text-novyxDark transition shadow-md">
                 <i class="fa-solid fa-house text-lg w-6"></i><span>Accueil</span>
@@ -78,11 +72,8 @@
             <button onclick="navigateTab('favorites'); toggleSidebar();" id="nav-favorites" class="w-full flex items-center space-x-4 px-4 py-3 rounded-xl font-medium text-left text-gray-300 hover:bg-white/5 hover:text-white transition">
                 <i class="fa-solid fa-heart text-lg w-6"></i><span>Favoris</span>
             </button>
-            <button onclick="navigateTab('history'); toggleSidebar();" id="nav-history" class="w-full flex items-center space-x-4 px-4 py-3 rounded-xl font-medium text-left text-gray-300 hover:bg-white/5 hover:text-white transition">
-                <i class="fa-solid fa-clock-rotate-left text-lg w-6"></i><span>Historique</span>
-            </button>
         </div>
-        <div class="p-4 border-t border-white/10 text-xs text-center text-gray-500">Novyx • Multi-Sources</div>
+        <div class="p-4 border-t border-white/10 text-xs text-center text-gray-500">Novyx • Redirection Directe</div>
     </div>
 
     <!-- Main Container -->
@@ -100,20 +91,12 @@
                     </div>
                     <p class="text-gray-300 text-sm md:text-base line-clamp-3 leading-relaxed">Les aventures d'un groupe d'explorateurs qui utilisent une faille dans l'espace-temps...</p>
                     <div class="flex items-center space-x-4 pt-2">
-                        <button onclick="triggerWatch({id: 157336, media_type: 'movie', title: 'Interstellar', poster_path: '/gEU2QniE6E77NI6lCU6MxlNBvIx.jpg'})" class="flex items-center space-x-3 bg-novyxGold hover:bg-novyxGoldHover text-novyxDark px-7 py-3.5 rounded-full font-bold transition shadow-lg">
-                            <i class="fa-solid fa-play"></i><span>Regarder</span>
-                        </button>
-                        <button onclick="openDetailsModal({id: 157336, media_type: 'movie', title: 'Interstellar', poster_path: '/gEU2QniE6E77NI6lCU6MxlNBvIx.jpg', vote_average: 8.6, release_date: '2014-11-05', overview: 'Exploration spatiale...'})" class="flex items-center space-x-3 bg-white/10 hover:bg-white/20 text-white px-7 py-3.5 rounded-full font-bold transition backdrop-blur-md border border-white/10">
-                            <i class="fa-solid fa-circle-info"></i><span>Détails</span>
+                        <button onclick="redirectToStreamzo({id: 157336, media_type: 'movie'})" class="flex items-center space-x-3 bg-novyxGold hover:bg-novyxGoldHover text-novyxDark px-7 py-3.5 rounded-full font-bold transition shadow-lg">
+                            <i class="fa-solid fa-play"></i><span>Regarder sur Streamzo</span>
                         </button>
                     </div>
                 </div>
             </div>
-
-            <section class="mt-8 px-4 md:px-8" id="continueWatchingSection" style="display:none;">
-                <h2 class="text-xl font-bold flex items-center space-x-2 mb-4"><i class="fa-solid fa-clock-rotate-left text-novyxGold mr-2"></i><span>Continuer à regarder</span></h2>
-                <div id="continueWatchingGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4"></div>
-            </section>
 
             <section class="mt-8 px-4 md:px-8">
                 <h2 class="text-xl font-bold flex items-center space-x-2 mb-4"><i class="fa-solid fa-fire text-novyxGold mr-2"></i><span>Films Populaires</span></h2>
@@ -140,11 +123,6 @@
             <h1 class="text-2xl font-bold mb-6 flex items-center"><i class="fa-solid fa-heart text-novyxGold mr-3"></i> Mes Favoris</h1>
             <div id="favoritesGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4"></div>
         </div>
-
-        <div id="view-history" class="view-section hidden px-4 md:px-8 pt-6">
-            <h1 class="text-2xl font-bold mb-6 flex items-center"><i class="fa-solid fa-clock-rotate-left text-novyxGold mr-3"></i> Historique</h1>
-            <div id="historyGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4"></div>
-        </div>
     </main>
 
     <!-- Search Modal -->
@@ -161,106 +139,21 @@
         </div>
     </div>
 
-    <!-- Details Modal -->
-    <div id="detailsModal" class="fixed inset-0 bg-black/80 z-50 hidden backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto">
-        <div class="bg-[#12151d] border border-white/10 rounded-2xl max-w-2xl w-full overflow-hidden shadow-2xl relative my-8">
-            <button onclick="closeDetailsModal()" class="absolute top-4 right-4 z-20 w-10 h-10 rounded-full bg-black/60 hover:bg-black text-white flex items-center justify-center transition"><i class="fa-solid fa-xmark text-lg"></i></button>
-            <div id="detailsBackdrop" class="relative w-full h-64 bg-cover bg-center" style="background-image: url('https://image.tmdb.org/t/p/original/pB8BM7pdSp6B6Ih7QZ4DrQ3PmJK.jpg');">
-                <div class="absolute inset-0 bg-gradient-to-t from-[#12151d] via-[#12151d]/50 to-transparent"></div>
-            </div>
-            <div class="p-6 -mt-16 relative z-10 space-y-4">
-                <div class="flex items-end space-x-4">
-                    <img id="detailsPoster" src="" class="w-28 h-40 object-cover rounded-xl shadow-xl border border-white/10" alt="Poster">
-                    <div class="space-y-1 pb-2">
-                        <h2 id="detailsTitle" class="text-2xl font-bold text-white"></h2>
-                        <div class="flex items-center space-x-3 text-sm text-gray-300">
-                            <span id="detailsRating" class="text-novyxGold font-bold flex items-center"><i class="fa-solid fa-star mr-1"></i> -</span>
-                            <span id="detailsYear"></span>
-                            <span id="detailsTypeBadge" class="bg-novyxGold/20 text-novyxGold px-2 py-0.5 rounded text-xs font-semibold"></span>
-                        </div>
-                    </div>
-                </div>
-
-                <div id="tvSeasonsContainer" class="hidden space-y-3 pt-2">
-                    <label class="block text-xs uppercase tracking-wider text-gray-400 font-bold">Saison</label>
-                    <div id="seasonsButtons" class="flex flex-wrap gap-2">
-                        <button onclick="selectSeason(1)" id="seasonBtn-1" class="px-3.5 py-2 rounded-xl text-sm font-semibold bg-novyxGold text-novyxDark">Saison 1</button>
-                        <button onclick="selectSeason(2)" id="seasonBtn-2" class="px-3.5 py-2 rounded-xl text-sm font-semibold bg-white/5 text-gray-300">Saison 2</button>
-                    </div>
-                    <label class="block text-xs uppercase tracking-wider text-gray-400 font-bold pt-2">Épisode</label>
-                    <select id="episodeSelect" class="w-full bg-[#1b1f2b] border border-white/10 rounded-xl p-3 text-white focus:outline-none focus:border-novyxGold">
-                        <option value="1">Épisode 1</option>
-                        <option value="2">Épisode 2</option>
-                        <option value="3">Épisode 3</option>
-                        <option value="4">Épisode 4</option>
-                        <option value="5">Épisode 5</option>
-                        <option value="6">Épisode 6</option>
-                        <option value="7">Épisode 7</option>
-                        <option value="8">Épisode 8</option>
-                        <option value="9">Épisode 9</option>
-                        <option value="10">Épisode 10</option>
-                    </select>
-                </div>
-
-                <p id="detailsOverview" class="text-gray-300 text-sm leading-relaxed"></p>
-
-                <div class="flex items-center space-x-4 pt-4 border-t border-white/10">
-                    <button id="modalWatchBtn" class="flex-1 bg-novyxGold hover:bg-novyxGoldHover text-novyxDark py-3.5 rounded-xl font-bold transition flex items-center justify-center space-x-2 shadow-lg shadow-novyxGold/20">
-                        <i class="fa-solid fa-play"></i><span>Regarder</span>
-                    </button>
-                    <button id="modalFavoriteBtn" onclick="toggleCurrentFavorite()" class="w-12 h-12 rounded-xl bg-white/5 hover:bg-white/10 text-white flex items-center justify-center transition border border-white/10">
-                        <i class="fa-regular fa-heart text-lg" id="modalFavIcon"></i>
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Lecteur Vidéo Plein Écran avec Multi-Sources de Secours -->
-    <div id="playerModal" class="fixed inset-0 bg-black z-50 hidden flex flex-col">
-        <div class="bg-black/90 backdrop-blur-md px-4 py-3 flex flex-wrap items-center justify-between border-b border-white/10 z-10 gap-2">
-            <div class="flex items-center space-x-3">
-                <button onclick="closePlayerModal()" class="w-10 h-10 rounded-xl bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition">
-                    <i class="fa-solid fa-arrow-left text-lg"></i>
-                </button>
-                <div>
-                    <h3 id="playerTitle" class="text-white font-bold text-sm md:text-base line-clamp-1">Lecture en cours</h3>
-                </div>
-            </div>
-            <!-- Sélecteur de Serveurs / Sources Multiples -->
-            <div class="flex items-center space-x-2">
-                <span class="text-xs text-gray-400 font-semibold hidden sm:inline">Serveur :</span>
-                <button onclick="switchServer('vidsrc')" id="srv-vidsrc" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-novyxGold text-novyxDark transition">Serveur 1</button>
-                <button onclick="switchServer('vidlink')" id="srv-vidlink" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-white/10 text-gray-300 hover:text-white transition">Serveur 2</button>
-                <button onclick="switchServer('vidsrc-to')" id="srv-vidsrc-to" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-white/10 text-gray-300 hover:text-white transition">Serveur VIP</button>
-            </div>
-        </div>
-        <div class="flex-1 w-full bg-black relative flex items-center justify-center">
-            <iframe id="secureVideoFrame" src="" class="w-full h-full border-none" allowfullscreen allow="autoplay; encrypted-media"></iframe>
-        </div>
-    </div>
-
-    <!-- Script Application Logic Complet avec Multi-Sources -->
+    <!-- Script de redirection vers Streamzo -->
     <script>
         const IMG_POSTER = "https://image.tmdb.org/t/p/w500";
-        let activeMedia = null;
-        let selectedSeason = 1;
-        let selectedEpisode = 1;
-        let currentServer = 'vidsrc';
-
         let favorites = JSON.parse(localStorage.getItem('novyx_favorites') || "[]");
-        let history = JSON.parse(localStorage.getItem('novyx_history') || "[]");
 
         const moviesList = [
-            { id: 157336, media_type: 'movie', title: 'Interstellar', poster_path: '/gEU2QniE6E77NI6lCU6MxlNBvIx.jpg', vote_average: 8.6, release_date: '2014-11-05', overview: 'Les aventures d’un groupe d’explorateurs...' },
-            { id: 550, media_type: 'movie', title: 'Fight Club', poster_path: '/pB8BM7pdSp6B6Ih7QZ4DrQ3PmJK.jpg', vote_average: 8.4, release_date: '1999-10-15', overview: 'Un jeune homme ennuyé par sa vie...' },
-            { id: 299534, media_type: 'movie', title: 'Avengers: Endgame', poster_path: '/or06FN3Dka5tukK1e9sl16pB3iy.jpg', vote_average: 8.3, release_date: '2019-04-24', overview: 'Thanos ayant anéanti la moitié de l’univers...' },
-            { id: 27205, media_type: 'movie', title: 'Inception', poster_path: '/9gk7adHYeDvHkCSEqAvQNLV5Uge.jpg', vote_average: 8.8, release_date: '2010-07-16', overview: 'Dom Cobb est un voleur expérimenté...' }
+            { id: 157336, media_type: 'movie', title: 'Interstellar', poster_path: '/gEU2QniE6E77NI6lCU6MxlNBvIx.jpg', vote_average: 8.6 },
+            { id: 550, media_type: 'movie', title: 'Fight Club', poster_path: '/pB8BM7pdSp6B6Ih7QZ4DrQ3PmJK.jpg', vote_average: 8.4 },
+            { id: 299534, media_type: 'movie', title: 'Avengers: Endgame', poster_path: '/or06FN3Dka5tukK1e9sl16pB3iy.jpg', vote_average: 8.3 },
+            { id: 27205, media_type: 'movie', title: 'Inception', poster_path: '/9gk7adHYeDvHkCSEqAvQNLV5Uge.jpg', vote_average: 8.8 }
         ];
 
         const seriesList = [
-            { id: 1396, media_type: 'tv', title: 'Breaking Bad', poster_path: '/ggFHVNu6YYI5L9pCfOacjizRGt.jpg', vote_average: 8.9, release_date: '2008-01-20', overview: 'Un professeur de chimie atteint d’un cancer...' },
-            { id: 66732, media_type: 'tv', title: 'Stranger Things', poster_path: '/49WJfeN0moxb9IPfGn8AIqMGskD.jpg', vote_average: 8.6, release_date: '2016-07-15', overview: 'À Hawkins, dans l’Indiana en 1983...' }
+            { id: 1396, media_type: 'tv', title: 'Breaking Bad', poster_path: '/ggFHVNu6YYI5L9pCfOacjizRGt.jpg', vote_average: 8.9 },
+            { id: 66732, media_type: 'tv', title: 'Stranger Things', poster_path: '/49WJfeN0moxb9IPfGn8AIqMGskD.jpg', vote_average: 8.6 }
         ];
 
         window.onload = function() {
@@ -269,8 +162,6 @@
             renderGrid(seriesList, 'popularSeriesGrid');
             renderGrid(seriesList, 'allSeriesGrid');
             renderFavorites();
-            renderHistory();
-            renderContinueWatching();
         };
 
         function toggleSidebar() {
@@ -290,7 +181,7 @@
             const container = document.getElementById(containerId);
             if (!container) return;
             container.innerHTML = items.map(item => `
-                <div class="group bg-[#151922] rounded-xl overflow-hidden border border-white/5 hover:border-novyxGold/50 transition cursor-pointer flex flex-col" onclick='openDetailsModal(${JSON.stringify(item)})'>
+                <div class="group bg-[#151922] rounded-xl overflow-hidden border border-white/5 hover:border-novyxGold/50 transition cursor-pointer flex flex-col" onclick='redirectToStreamzo(${JSON.stringify(item)})'>
                     <div class="relative aspect-[2/3] w-full overflow-hidden bg-gray-900">
                         <img src="${IMG_POSTER}${item.poster_path}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" loading="lazy">
                         <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
@@ -304,107 +195,12 @@
             `).join('');
         }
 
-        function openDetailsModal(media) {
-            activeMedia = media;
-            const isMovie = media.media_type === 'movie';
-
-            document.getElementById('detailsPoster').src = `${IMG_POSTER}${media.poster_path}`;
-            document.getElementById('detailsTitle').innerText = media.title;
-            document.getElementById('detailsRating').innerHTML = `<i class="fa-solid fa-star mr-1"></i> ${media.vote_average || '8.0'}`;
-            document.getElementById('detailsYear').innerText = (media.release_date || "").split('-')[0] || "2026";
-            document.getElementById('detailsTypeBadge').innerText = isMovie ? "Film" : "Série TV";
-            document.getElementById('detailsOverview').innerText = media.overview || "Aucun synopsis disponible.";
-
-            const tvContainer = document.getElementById('tvSeasonsContainer');
-            if (!isMovie) {
-                tvContainer.classList.remove('hidden');
-            } else {
-                tvContainer.classList.add('hidden');
-            }
-
-            document.getElementById('modalWatchBtn').onclick = () => { closeDetailsModal(); triggerWatch(activeMedia); };
-            updateFavoriteIcon();
-            document.getElementById('detailsModal').classList.remove('hidden');
-        }
-
-        function closeDetailsModal() { document.getElementById('detailsModal').classList.add('hidden'); }
-
-        function selectSeason(sn) {
-            selectedSeason = sn;
-            document.getElementById('seasonBtn-1').className = sn === 1 ? "px-3.5 py-2 rounded-xl text-sm font-semibold bg-novyxGold text-novyxDark" : "px-3.5 py-2 rounded-xl text-sm font-semibold bg-white/5 text-gray-300";
-            document.getElementById('seasonBtn-2').className = sn === 2 ? "px-3.5 py-2 rounded-xl text-sm font-semibold bg-novyxGold text-novyxDark" : "px-3.5 py-2 rounded-xl text-sm font-semibold bg-white/5 text-gray-300";
-        }
-
-        document.getElementById('episodeSelect').onchange = (e) => { selectedEpisode = parseInt(e.target.value); };
-
-        function triggerWatch(media) {
-            activeMedia = media;
-            const isMovie = media.media_type === 'movie';
-            const currentSeason = isMovie ? null : selectedSeason;
-            const currentEpisode = isMovie ? null : selectedEpisode;
-
-            document.getElementById('playerTitle').innerText = isMovie ? media.title : `${media.title} - S${currentSeason} E${currentEpisode}`;
-            document.getElementById('playerModal').classList.remove('hidden');
-            loadPlayerSource();
-            addToHistory(media);
-        }
-
-        function switchServer(serverName) {
-            currentServer = serverName;
-            ['vidsrc', 'vidlink', 'vidsrc-to'].forEach(s => {
-                const btn = document.getElementById(`srv-${s}`);
-                if (btn) btn.className = s === serverName ? "px-3 py-1.5 rounded-lg text-xs font-bold bg-novyxGold text-novyxDark transition" : "px-3 py-1.5 rounded-lg text-xs font-bold bg-white/10 text-gray-300 hover:text-white transition";
-            });
-            loadPlayerSource();
-        }
-
-        function loadPlayerSource() {
-            if (!activeMedia) return;
-            const isMovie = activeMedia.media_type === 'movie';
-            const id = activeMedia.id;
-            const s = selectedSeason;
-            const ep = selectedEpisode;
-            const iframe = document.getElementById('secureVideoFrame');
-
-            let url = "";
-            if (currentServer === 'vidsrc') {
-                url = isMovie ? `https://vidsrc.xyz/embed/movie?tmdb=${id}` : `https://vidsrc.xyz/embed/tv?tmdb=${id}&season=${s}&episode=${ep}`;
-            } else if (currentServer === 'vidlink') {
-                url = isMovie ? `https://vidlink.pro/movie/${id}` : `https://vidlink.pro/tv/${id}/${s}/${ep}`;
-            } else if (currentServer === 'vidsrc-to') {
-                url = isMovie ? `https://vidsrc.to/embed/movie/${id}` : `https://vidsrc.to/embed/tv/${id}/${s}/${ep}`;
-            }
-            iframe.src = url;
-        }
-
-        function closePlayerModal() {
-            document.getElementById('secureVideoFrame').src = "";
-            document.getElementById('playerModal').classList.add('hidden');
-        }
-
-        function toggleCurrentFavorite() {
-            if (!activeMedia) return;
-            const idx = favorites.findIndex(f => f.id === activeMedia.id);
-            if (idx > -1) favorites.splice(idx, 1); else favorites.push(activeMedia);
-            localStorage.setItem('novyx_favorites', JSON.stringify(favorites));
-            updateFavoriteIcon();
-            renderFavorites();
-        }
-
-        function updateFavoriteIcon() {
-            if (!activeMedia) return;
-            const isFav = favorites.some(f => f.id === activeMedia.id);
-            const icon = document.getElementById('modalFavIcon');
-            icon.className = isFav ? "fa-solid fa-heart text-lg text-novyxGold" : "fa-regular fa-heart text-lg";
-        }
-
-        function renderFavorites() { renderGrid(favorites, 'favoritesGrid'); }
-        function addToHistory(media) { history = history.filter(h => h.id !== media.id); history.unshift(media); localStorage.setItem('novyx_history', JSON.stringify(history)); renderHistory(); renderContinueWatching(); }
-        function renderHistory() { renderGrid(history, 'historyGrid'); }
-        function renderContinueWatching() {
-            const section = document.getElementById('continueWatchingSection');
-            if (history.length > 0) { section.style.display = 'block'; renderGrid(history.slice(0, 5), 'continueWatchingGrid'); }
-            else { section.style.display = 'none'; }
+        // Fonction magique de redirection vers Streamzo
+        function redirectToStreamzo(media) {
+            const type = media.media_type === 'movie' ? 'movie' : 'tv';
+            // Redirection directe vers le lecteur officiel Streamzo basé sur l'ID TMDB
+            const streamzoUrl = `https://streamzo.to/${type}/${media.id}`;
+            window.location.href = streamzoUrl;
         }
 
         function openSearchModal() { document.getElementById('searchModal').classList.remove('hidden'); }
