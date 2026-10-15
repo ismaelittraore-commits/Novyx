@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Novyx - Streaming VF Complet</title>
+    <title>Novyx - Streaming Multi-Sources</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -82,7 +82,7 @@
                 <i class="fa-solid fa-clock-rotate-left text-lg w-6"></i><span>Historique</span>
             </button>
         </div>
-        <div class="p-4 border-t border-white/10 text-xs text-center text-gray-500">Novyx • Complet & Stable</div>
+        <div class="p-4 border-t border-white/10 text-xs text-center text-gray-500">Novyx • Multi-Sources</div>
     </div>
 
     <!-- Main Container -->
@@ -98,9 +98,9 @@
                         <span class="text-gray-400">2014</span>
                         <span class="bg-white/10 px-2.5 py-0.5 rounded text-xs text-gray-200">Film</span>
                     </div>
-                    <p class="text-gray-300 text-sm md:text-base line-clamp-3 leading-relaxed">Les aventures d'un groupe d'explorateurs qui utilisent une faille dans l'espace-temps afin de repousser les limites humaines...</p>
+                    <p class="text-gray-300 text-sm md:text-base line-clamp-3 leading-relaxed">Les aventures d'un groupe d'explorateurs qui utilisent une faille dans l'espace-temps...</p>
                     <div class="flex items-center space-x-4 pt-2">
-                        <button onclick="triggerWatch({id: 157336, media_type: 'movie', title: 'Interstellar', poster_path: '/gEU2QniE6E77NI6lCU6MxlNBvIx.jpg', overview: 'Exploration spatiale...'})" class="flex items-center space-x-3 bg-novyxGold hover:bg-novyxGoldHover text-novyxDark px-7 py-3.5 rounded-full font-bold transition shadow-lg">
+                        <button onclick="triggerWatch({id: 157336, media_type: 'movie', title: 'Interstellar', poster_path: '/gEU2QniE6E77NI6lCU6MxlNBvIx.jpg'})" class="flex items-center space-x-3 bg-novyxGold hover:bg-novyxGoldHover text-novyxDark px-7 py-3.5 rounded-full font-bold transition shadow-lg">
                             <i class="fa-solid fa-play"></i><span>Regarder</span>
                         </button>
                         <button onclick="openDetailsModal({id: 157336, media_type: 'movie', title: 'Interstellar', poster_path: '/gEU2QniE6E77NI6lCU6MxlNBvIx.jpg', vote_average: 8.6, release_date: '2014-11-05', overview: 'Exploration spatiale...'})" class="flex items-center space-x-3 bg-white/10 hover:bg-white/20 text-white px-7 py-3.5 rounded-full font-bold transition backdrop-blur-md border border-white/10">
@@ -216,17 +216,23 @@
         </div>
     </div>
 
-    <!-- Lecteur Vidéo Plein Écran -->
+    <!-- Lecteur Vidéo Plein Écran avec Multi-Sources de Secours -->
     <div id="playerModal" class="fixed inset-0 bg-black z-50 hidden flex flex-col">
-        <div class="bg-black/90 backdrop-blur-md px-4 py-3 flex items-center justify-between border-b border-white/10 z-10">
+        <div class="bg-black/90 backdrop-blur-md px-4 py-3 flex flex-wrap items-center justify-between border-b border-white/10 z-10 gap-2">
             <div class="flex items-center space-x-3">
                 <button onclick="closePlayerModal()" class="w-10 h-10 rounded-xl bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition">
                     <i class="fa-solid fa-arrow-left text-lg"></i>
                 </button>
                 <div>
                     <h3 id="playerTitle" class="text-white font-bold text-sm md:text-base line-clamp-1">Lecture en cours</h3>
-                    <span id="playerSubtitle" class="text-xs text-novyxGold font-medium">Flux direct VF</span>
                 </div>
+            </div>
+            <!-- Sélecteur de Serveurs / Sources Multiples -->
+            <div class="flex items-center space-x-2">
+                <span class="text-xs text-gray-400 font-semibold hidden sm:inline">Serveur :</span>
+                <button onclick="switchServer('vidsrc')" id="srv-vidsrc" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-novyxGold text-novyxDark transition">Serveur 1</button>
+                <button onclick="switchServer('vidlink')" id="srv-vidlink" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-white/10 text-gray-300 hover:text-white transition">Serveur 2</button>
+                <button onclick="switchServer('vidsrc-to')" id="srv-vidsrc-to" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-white/10 text-gray-300 hover:text-white transition">Serveur VIP</button>
             </div>
         </div>
         <div class="flex-1 w-full bg-black relative flex items-center justify-center">
@@ -234,12 +240,13 @@
         </div>
     </div>
 
-    <!-- Script Application Logic Complet -->
+    <!-- Script Application Logic Complet avec Multi-Sources -->
     <script>
         const IMG_POSTER = "https://image.tmdb.org/t/p/w500";
         let activeMedia = null;
         let selectedSeason = 1;
         let selectedEpisode = 1;
+        let currentServer = 'vidsrc';
 
         let favorites = JSON.parse(localStorage.getItem('novyx_favorites') || "[]");
         let history = JSON.parse(localStorage.getItem('novyx_history') || "[]");
@@ -338,14 +345,36 @@
 
             document.getElementById('playerTitle').innerText = isMovie ? media.title : `${media.title} - S${currentSeason} E${currentEpisode}`;
             document.getElementById('playerModal').classList.remove('hidden');
-
-            const iframe = document.getElementById('secureVideoFrame');
-            if (isMovie) {
-                iframe.src = `https://vidsrc.xyz/embed/movie?tmdb=${media.id}`;
-            } else {
-                iframe.src = `https://vidsrc.xyz/embed/tv?tmdb=${media.id}&season=${currentSeason}&episode=${currentEpisode}`;
-            }
+            loadPlayerSource();
             addToHistory(media);
+        }
+
+        function switchServer(serverName) {
+            currentServer = serverName;
+            ['vidsrc', 'vidlink', 'vidsrc-to'].forEach(s => {
+                const btn = document.getElementById(`srv-${s}`);
+                if (btn) btn.className = s === serverName ? "px-3 py-1.5 rounded-lg text-xs font-bold bg-novyxGold text-novyxDark transition" : "px-3 py-1.5 rounded-lg text-xs font-bold bg-white/10 text-gray-300 hover:text-white transition";
+            });
+            loadPlayerSource();
+        }
+
+        function loadPlayerSource() {
+            if (!activeMedia) return;
+            const isMovie = activeMedia.media_type === 'movie';
+            const id = activeMedia.id;
+            const s = selectedSeason;
+            const ep = selectedEpisode;
+            const iframe = document.getElementById('secureVideoFrame');
+
+            let url = "";
+            if (currentServer === 'vidsrc') {
+                url = isMovie ? `https://vidsrc.xyz/embed/movie?tmdb=${id}` : `https://vidsrc.xyz/embed/tv?tmdb=${id}&season=${s}&episode=${ep}`;
+            } else if (currentServer === 'vidlink') {
+                url = isMovie ? `https://vidlink.pro/movie/${id}` : `https://vidlink.pro/tv/${id}/${s}/${ep}`;
+            } else if (currentServer === 'vidsrc-to') {
+                url = isMovie ? `https://vidsrc.to/embed/movie/${id}` : `https://vidsrc.to/embed/tv/${id}/${s}/${ep}`;
+            }
+            iframe.src = url;
         }
 
         function closePlayerModal() {
