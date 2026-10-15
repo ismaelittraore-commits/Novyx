@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Novyx - Streaming</title>
-    <!-- Tailwind CSS CDN -->
+    <title>Novyx - Streaming VF</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -21,7 +20,6 @@
             }
         }
     </script>
-    <!-- FontAwesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap');
@@ -44,7 +42,10 @@
                 <span class="text-xl font-bold tracking-wider text-white">Novyx</span>
             </div>
         </div>
-        <div class="flex items-center space-x-4">
+        <div class="flex items-center space-x-3">
+            <button onclick="openAdminModal()" class="px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-xs font-bold text-novyxGold transition flex items-center space-x-1.5 border border-novyxGold/30">
+                <i class="fa-solid fa-plus"></i><span>Ajouter Lien VF</span>
+            </button>
             <button onclick="openSearchModal()" class="w-10 h-10 rounded-full bg-white/5 hover:bg-white/10 flex items-center justify-center text-white transition">
                 <i class="fa-solid fa-magnifying-glass text-novyxGold"></i>
             </button>
@@ -86,7 +87,7 @@
                 <i class="fa-solid fa-clock-rotate-left text-lg w-6"></i><span>Historique</span>
             </button>
         </div>
-        <div class="p-4 border-t border-white/10 text-xs text-center text-gray-500">Novyx v3.0 • Multi-Sources Backend</div>
+        <div class="p-4 border-t border-white/10 text-xs text-center text-gray-500">Novyx • Streamzo Architecture</div>
     </div>
 
     <!-- Main Container -->
@@ -154,15 +155,59 @@
         <div id="view-favorites" class="view-section hidden px-4 md:px-8 pt-6">
             <h1 class="text-2xl font-bold mb-6 flex items-center"><i class="fa-solid fa-heart text-novyxGold mr-3"></i> Mes Favoris</h1>
             <div id="favoritesGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4"></div>
-            <div id="noFavorites" class="text-center py-20 text-gray-500 hidden"><i class="fa-regular fa-heart text-5xl mb-3 text-gray-600"></i><p>Aucun favori pour le moment.</p></div>
         </div>
 
         <div id="view-history" class="view-section hidden px-4 md:px-8 pt-6">
-            <h1 class="text-2xl font-bold mb-6 flex items-center"><i class="fa-solid fa-clock-rotate-left text-novyxGold mr-3"></i> Historique de visionnage</h1>
+            <h1 class="text-2xl font-bold mb-6 flex items-center"><i class="fa-solid fa-clock-rotate-left text-novyxGold mr-3"></i> Historique</h1>
             <div id="historyGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4"></div>
-            <div id="noHistory" class="text-center py-20 text-gray-500 hidden"><i class="fa-solid fa-clock text-5xl mb-3 text-gray-600"></i><p>Votre historique est vide.</p></div>
         </div>
     </main>
+
+    <!-- Modal d'Ajout de Lien VF (Panneau Admin Streamzo) -->
+    <div id="adminModal" class="fixed inset-0 bg-black/80 z-50 hidden backdrop-blur-md flex items-center justify-center p-4">
+        <div class="bg-[#151922] border border-white/10 rounded-2xl max-w-md w-full p-6 space-y-4 shadow-2xl relative">
+            <button onclick="closeAdminModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white text-xl"><i class="fa-solid fa-xmark"></i></button>
+            <h3 class="text-xl font-bold text-white flex items-center space-x-2">
+                <i class="fa-solid fa-link text-novyxGold"></i><span>Ajouter un lecteur VF</span>
+            </h3>
+            <p class="text-xs text-gray-400">Ajoute un lien d'hébergeur direct (Doodstream, Streamtape, Supervideo, Vidoza, etc.) pour un film ou une série.</p>
+            
+            <div class="space-y-3 pt-2">
+                <div>
+                    <label class="block text-xs font-bold text-gray-300 mb-1">Type de Média</label>
+                    <select id="adminMediaType" onchange="toggleAdminSeasonInputs()" class="w-full bg-[#1b1f2b] border border-white/10 rounded-xl p-3 text-white text-sm focus:outline-none focus:border-novyxGold">
+                        <option value="movie">Film</option>
+                        <option value="tv">Série TV</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-300 mb-1">TMDB ID du film / série</label>
+                    <input type="number" id="adminTmdbId" placeholder="Ex: 60309 (Chica Vampiro)" class="w-full bg-[#1b1f2b] border border-white/10 rounded-xl p-3 text-white text-sm focus:outline-none focus:border-novyxGold">
+                </div>
+                <div id="adminTvInputs" class="grid grid-cols-2 gap-3 hidden">
+                    <div>
+                        <label class="block text-xs font-bold text-gray-300 mb-1">Saison</label>
+                        <input type="number" id="adminSeason" value="1" class="w-full bg-[#1b1f2b] border border-white/10 rounded-xl p-3 text-white text-sm focus:outline-none focus:border-novyxGold">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-300 mb-1">Épisode</label>
+                        <input type="number" id="adminEpisode" value="1" class="w-full bg-[#1b1f2b] border border-white/10 rounded-xl p-3 text-white text-sm focus:outline-none focus:border-novyxGold">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-300 mb-1">Nom du Lecteur / Hébergeur</label>
+                    <input type="text" id="adminProvider" placeholder="Ex: Doodstream (VF) / Streamtape" class="w-full bg-[#1b1f2b] border border-white/10 rounded-xl p-3 text-white text-sm focus:outline-none focus:border-novyxGold">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-300 mb-1">URL d'Embed du lecteur</label>
+                    <input type="url" id="adminUrl" placeholder="https://doodstream.com/e/..." class="w-full bg-[#1b1f2b] border border-white/10 rounded-xl p-3 text-white text-sm focus:outline-none focus:border-novyxGold">
+                </div>
+                <button onclick="submitCustomLink()" class="w-full bg-novyxGold hover:bg-novyxGoldHover text-novyxDark py-3 rounded-xl font-bold transition mt-2 shadow-lg shadow-novyxGold/20">
+                    Enregistrer le lien VF
+                </button>
+            </div>
+        </div>
+    </div>
 
     <!-- Search Modal -->
     <div id="searchModal" class="fixed inset-0 bg-black/80 z-50 hidden backdrop-blur-md flex flex-col p-4 md:p-12">
@@ -174,9 +219,7 @@
                 </div>
                 <button onclick="closeSearchModal()" class="w-12 h-12 rounded-xl bg-white/5 hover:bg-white/10 flex items-center justify-center text-white text-xl"><i class="fa-solid fa-xmark"></i></button>
             </div>
-            <div id="searchResultsContainer" class="flex-1 overflow-y-auto grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 pr-2">
-                <div class="col-span-full text-center py-20 text-gray-500">Commencez à taper pour rechercher...</div>
-            </div>
+            <div id="searchResultsContainer" class="flex-1 overflow-y-auto grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 pr-2"></div>
         </div>
     </div>
 
@@ -221,7 +264,7 @@
         </div>
     </div>
 
-    <!-- Video Player Modal -->
+    <!-- Video Player Modal (Nettoyé Anti-Ecran Noir) -->
     <div id="playerModal" class="fixed inset-0 bg-black z-50 hidden flex flex-col">
         <div class="bg-black/80 backdrop-blur-md px-4 py-3 flex flex-wrap items-center justify-between border-b border-white/10 z-10 gap-2">
             <div class="flex items-center space-x-3">
@@ -230,21 +273,13 @@
                 </button>
                 <div>
                     <h3 id="playerTitle" class="text-white font-bold text-sm md:text-base line-clamp-1">Titre de la vidéo</h3>
-                    <span id="playerSubtitle" class="text-xs text-novyxGold font-medium">Lien VF</span>
+                    <span id="playerSubtitle" class="text-xs text-novyxGold font-medium">Chargement des serveurs...</span>
                 </div>
             </div>
-            <!-- Boutons de changement de serveur -->
-            <div class="flex items-center space-x-2 overflow-x-auto py-1">
-                <button onclick="changeServer('vidsrcme_fr')" id="srv-vidsrcme_fr" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-novyxGold text-novyxDark transition whitespace-nowrap">Serveur A (VF)</button>
-                <button onclick="changeServer('multiembed')" id="srv-multiembed" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-white/10 text-gray-300 hover:bg-white/20 transition whitespace-nowrap">Serveur B (Multi)</button>
-                <button onclick="changeServer('vidsrcpro')" id="srv-vidsrcpro" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-white/10 text-gray-300 hover:bg-white/20 transition whitespace-nowrap">Serveur C</button>
-                <button onclick="changeServer('vidsrcxyz')" id="srv-vidsrcxyz" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-white/10 text-gray-300 hover:bg-white/20 transition whitespace-nowrap">Serveur D</button>
-                <button onclick="toggleFullscreen()" class="w-10 h-10 rounded-xl bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition ml-2">
-                    <i class="fa-solid fa-expand"></i>
-                </button>
-            </div>
+            <!-- Liste dynamique des serveurs/hébergeurs -->
+            <div id="serversList" class="flex items-center space-x-2 overflow-x-auto py-1"></div>
         </div>
-        <div class="flex-1 w-full bg-black relative">
+        <div class="flex-1 w-full bg-black relative flex items-center justify-center">
             <iframe id="videoIframe" src="" class="w-full h-full border-none" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
         </div>
     </div>
@@ -260,12 +295,9 @@
         let currentPlayingMedia = null;
         let currentSeason = 1;
         let currentEpisode = 1;
-        let currentServer = 'vidsrcme_fr';
-
         let heroMovies = [];
         let currentHeroIndex = 0;
         let heroInterval = null;
-
         let activeMedia = null;
         let selectedSeason = 1;
         let selectedEpisode = 1;
@@ -455,44 +487,96 @@
             fetchStreamUrl();
         }
 
-        async function fetchStreamUrl() {
+        async function fetchStreamUrl(preferredServer = 'auto') {
             if (!currentPlayingMedia) return;
             const isMovie = currentPlayingMedia.media_type === 'movie';
             const type = isMovie ? 'movie' : 'tv';
             const tmdbId = currentPlayingMedia.id;
 
-            document.getElementById('playerSubtitle').innerText = "Chargement du flux...";
+            document.getElementById('playerSubtitle').innerText = "Recherche des hébergeurs VF...";
 
             try {
-                let apiUrl = `${BACKEND_RENDER_URL}/api/source/${type}/${tmdbId}?server=${currentServer}`;
+                let apiUrl = `${BACKEND_RENDER_URL}/api/source/${type}/${tmdbId}?server=${preferredServer}`;
                 if (!isMovie) apiUrl += `&season=${currentSeason}&episode=${currentEpisode}`;
 
                 const response = await fetch(apiUrl);
                 const data = await response.json();
 
-                if (data.success && data.streamUrl) {
+                if (data.success && data.sources && data.sources.length > 0) {
+                    renderServersList(data.sources, data.streamUrl);
                     document.getElementById('videoIframe').src = data.streamUrl;
-                    document.getElementById('playerSubtitle').innerText = `Serveur actif : ${currentServer}`;
+                    document.getElementById('playerSubtitle').innerText = `Flux actif chargé (${data.sources.length} sources disponibles)`;
                 } else {
-                    document.getElementById('playerSubtitle').innerText = "Erreur : Flux non trouvé sur ce serveur";
+                    document.getElementById('playerSubtitle').innerText = "Aucun hébergeur disponible pour le moment";
                 }
             } catch (error) {
                 console.error(error);
-                document.getElementById('playerSubtitle').innerText = "Erreur de connexion serveur";
+                document.getElementById('playerSubtitle').innerText = "Erreur de connexion au serveur backend";
             }
         }
 
-        function changeServer(srvName) {
-            currentServer = srvName;
-            ['vidsrcme_fr', 'multiembed', 'vidsrcpro', 'vidsrcxyz'].forEach(s => {
-                const btn = document.getElementById(`srv-${s}`);
-                if (btn) btn.className = s === srvName ? "px-3 py-1.5 rounded-lg text-xs font-bold bg-novyxGold text-novyxDark transition whitespace-nowrap" : "px-3 py-1.5 rounded-lg text-xs font-bold bg-white/10 text-gray-300 hover:bg-white/20 transition whitespace-nowrap";
-            });
-            fetchStreamUrl();
+        function renderServersList(sources, activeUrl) {
+            const container = document.getElementById('serversList');
+            container.innerHTML = sources.map((s, idx) => {
+                const isActive = s.url === activeUrl;
+                return `
+                    <button onclick="loadDirectUrl('${s.url}')" class="px-3 py-1.5 rounded-lg text-xs font-bold transition whitespace-nowrap ${isActive ? 'bg-novyxGold text-novyxDark shadow-md' : 'bg-white/10 text-gray-300 hover:bg-white/20'}">
+                        ${s.name}
+                    </button>
+                `;
+            }).join('');
         }
 
-        function closePlayerModal() { document.getElementById('videoIframe').src = ""; document.getElementById('playerModal').classList.add('hidden'); }
-        function toggleFullscreen() { const iframe = document.getElementById('videoIframe'); if (!document.fullscreenElement) iframe.requestFullscreen(); else document.exitFullscreen(); }
+        function loadDirectUrl(url) {
+            document.getElementById('videoIframe').src = url;
+        }
+
+        function closePlayerModal() { 
+            document.getElementById('videoIframe').src = ""; 
+            document.getElementById('playerModal').classList.add('hidden'); 
+        }
+
+        // Gestion du panneau Admin (Ajout de liens VF)
+        function openAdminModal() { document.getElementById('adminModal').classList.remove('hidden'); }
+        function closeAdminModal() { document.getElementById('adminModal').classList.add('hidden'); }
+        function toggleAdminSeasonInputs() {
+            const type = document.getElementById('adminMediaType').value;
+            document.getElementById('adminTvInputs').className = type === 'tv' ? "grid grid-cols-2 gap-3" : "grid grid-cols-2 gap-3 hidden";
+        }
+
+        async function submitCustomLink() {
+            const type = document.getElementById('adminMediaType').value;
+            const id = document.getElementById('adminTmdbId').value;
+            const season = document.getElementById('adminSeason').value;
+            const episode = document.getElementById('adminEpisode').value;
+            const provider = document.getElementById('adminProvider').value;
+            const url = document.getElementById('adminUrl').value;
+
+            if (!id || !provider || !url) {
+                alert("Veuillez remplir tous les champs !");
+                return;
+            }
+
+            const mediaKey = type === 'movie' ? `movie_${id}` : `tv_${id}_s${season}_e${episode}`;
+
+            try {
+                const res = await fetch(`${BACKEND_RENDER_URL}/api/admin/add-link`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ mediaKey, provider, url })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    alert("Lien VF ajouté avec succès !");
+                    closeAdminModal();
+                } else {
+                    alert("Erreur lors de l'ajout du lien.");
+                }
+            } catch (err) {
+                console.error(err);
+                alert("Impossible de contacter le serveur backend.");
+            }
+        }
 
         function toggleCurrentFavorite() {
             if (!activeMedia) return;
