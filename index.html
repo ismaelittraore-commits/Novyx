@@ -3,10 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Novyx - Streaming VF Natif</title>
+    <title>Novyx - Streaming VF Intelligent</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Lecteur vidéo HLS.js pour les flux natifs -->
-    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <script>
         tailwind.config = {
             darkMode: 'class',
@@ -86,7 +84,7 @@
                 <i class="fa-solid fa-clock-rotate-left text-lg w-6"></i><span>Historique</span>
             </button>
         </div>
-        <div class="p-4 border-t border-white/10 text-xs text-center text-gray-500">Novyx • Lecteur Natif VF</div>
+        <div class="p-4 border-t border-white/10 text-xs text-center text-gray-500">Novyx • Intégrateur Intelligent</div>
     </div>
 
     <!-- Main Container -->
@@ -216,7 +214,7 @@
         </div>
     </div>
 
-    <!-- Lecteur Vidéo Plein Écran Natif (Aucune iFrame) -->
+    <!-- Lecteur Vidéo Intégrateur Sécurisé -->
     <div id="playerModal" class="fixed inset-0 bg-black z-50 hidden flex flex-col">
         <div class="bg-black/90 backdrop-blur-md px-4 py-3 flex items-center justify-between border-b border-white/10 z-10">
             <div class="flex items-center space-x-3">
@@ -225,13 +223,13 @@
                 </button>
                 <div>
                     <h3 id="playerTitle" class="text-white font-bold text-sm md:text-base line-clamp-1">Lecture en cours</h3>
-                    <span id="playerSubtitle" class="text-xs text-novyxGold font-medium">Flux natif haute performance</span>
+                    <span id="playerSubtitle" class="text-xs text-novyxGold font-medium">Lecteur optimisé Novyx</span>
                 </div>
             </div>
         </div>
         <div class="flex-1 w-full bg-black relative flex items-center justify-center">
-            <!-- Balise vidéo HTML5 native optimisée mobile -->
-            <video id="nativeVideoPlayer" controls playsinline class="w-full h-full max-h-screen bg-black"></video>
+            <!-- Iframe sécurisée avec contournement et permissions de lecture -->
+            <iframe id="secureVideoFrame" src="" class="w-full h-full border-none" referrerpolicy="no-referrer" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
         </div>
     </div>
 
@@ -249,7 +247,6 @@
         let heroMovies = [];
         let currentHeroIndex = 0;
         let heroInterval = null;
-        let hlsInstance = null;
 
         let favorites = JSON.parse(localStorage.getItem('novyx_favorites') || "[]");
         let history = JSON.parse(localStorage.getItem('novyx_history') || "[]");
@@ -438,6 +435,7 @@
         async function fetchStreamAndPlay(media, isMovie, season, episode) {
             const type = isMovie ? 'movie' : 'tv';
             const tmdbId = media.id;
+            const iframe = document.getElementById('secureVideoFrame');
 
             try {
                 let apiUrl = `${BACKEND_RENDER_URL}/api/source/${type}/${tmdbId}`;
@@ -446,51 +444,19 @@
                 const response = await fetch(apiUrl);
                 const data = await response.json();
 
-                if (data.success && data.directUrl) {
-                    playNativeStream(data.directUrl, data.streamType);
+                if (data.success && data.primaryUrl) {
+                    iframe.src = data.primaryUrl;
                 } else {
-                    alert("Flux vidéo non disponible pour ce média.");
+                    iframe.src = `https://vidsrc.xyz/embed/${type}?tmdb=${tmdbId}${!isMovie ? `&season=${season}&episode=${episode}` : ''}`;
                 }
             } catch (error) {
                 console.error(error);
-                alert("Erreur de communication avec le serveur de flux.");
-            }
-        }
-
-        function playNativeStream(streamUrl, type) {
-            const videoElement = document.getElementById('nativeVideoPlayer');
-
-            if (hlsInstance) {
-                hlsInstance.destroy();
-                hlsInstance = null;
-            }
-
-            if (type === 'hls' || streamUrl.includes('.m3u8')) {
-                if (Hls.isSupported()) {
-                    hlsInstance = new Hls();
-                    hlsInstance.loadSource(streamUrl);
-                    hlsInstance.attachMedia(videoElement);
-                    hlsInstance.on(Hls.Events.MANIFEST_PARSED, function() {
-                        videoElement.play().catch(e => console.log("Attente clic utilisateur"));
-                    });
-                } else if (videoElement.canPlayType('application/vnd.apple.mpegurl')) {
-                    videoElement.src = streamUrl;
-                    videoElement.play().catch(e => console.log("Attente clic utilisateur"));
-                }
-            } else {
-                videoElement.src = streamUrl;
-                videoElement.play().catch(e => console.log("Attente clic utilisateur"));
+                iframe.src = `https://vidsrc.xyz/embed/${type}?tmdb=${tmdbId}${!isMovie ? `&season=${season}&episode=${episode}` : ''}`;
             }
         }
 
         function closePlayerModal() { 
-            const videoElement = document.getElementById('nativeVideoPlayer');
-            videoElement.pause();
-            videoElement.src = "";
-            if (hlsInstance) {
-                hlsInstance.destroy();
-                hlsInstance = null;
-            }
+            document.getElementById('secureVideoFrame').src = "";
             document.getElementById('playerModal').classList.add('hidden'); 
         }
 
@@ -508,7 +474,7 @@
         function renderContinueWatching() { renderMediaGrid(history.slice(0, 5), 'continueWatchingGrid'); }
 
         function openSearchModal() { document.getElementById('searchModal').classList.remove('hidden'); }
-        function closeSearchModal() { document.getElementById('searchModal').classList.add('hidden'); }
+        function closeSearchModal() { document.getElementById('searchModal'].classList.add('hidden'); }
 
         async function performSearch(query) {
             if (!query.trim()) return;
