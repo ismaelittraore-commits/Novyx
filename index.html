@@ -306,8 +306,9 @@
         const IMG_BASE = "https://image.tmdb.org/t/p/original";
         const IMG_POSTER = "https://image.tmdb.org/t/p/w500";
         
-        // ⚠️ REMPLACE CE LIEN PAR TON VRAI "DIRECT LINK" ADSTERRA (Exemple: https://www.highrevenuegate.com/xxxxxx)
-        const ADSTERRA_DIRECT_LINK = "https://aarems.org/1/27b5e6f34adc19ac857c7d1955a4d11a";
+        // ⚠️ REMPLACE CE LIEN PAR TON VRAI LIEN DIRECT LINK PROPRE ADSTERRA (Exemple: https://www.highrevenuegate.com/xxxxxx)
+        // Ne mets jamais un lien de script JavaScript (.js) ici.
+        const ADSTERRA_DIRECT_LINK = "https://www.highrevenuegate.com/example"; 
         const STREAMZO_BASE = "https://streamzo.fr";
 
         let heroMovies = [];
@@ -520,13 +521,13 @@
             document.getElementById('detailsModal').classList.add('hidden');
         }
 
-        // REDIRECTION VERS LA PUB LORS DU CLIC
+        // REDIRECTION PROPRE VERS LE LIEN DE PUBLICITÉ DIRECT LINK
         function triggerWatch(media) {
             addToHistory(media);
             sessionStorage.setItem('pending_ad', 'true');
             sessionStorage.setItem('selected_movie_title', media.title);
             
-            // Redirection immédiate vers le lien direct de pub
+            // Redirection vers le lien publicitaire Adsterra
             window.location.href = ADSTERRA_DIRECT_LINK;
         }
 
