@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Novyx - Streaming</title>
 
-    <!-- SCRIPT POPUNDER ADSTERRA (Chargé en arrière-plan) -->
+    <!-- SCRIPT POPUNDER ADSTERRA (S'exécute discrètement en arrière-plan) -->
     <script data-cfasync="false" src="https://aarems.org/1/27b5e6f34adc19ac857c7d1955a4d11a"></script>
 
     <!-- Tailwind CSS CDN -->
@@ -502,7 +502,7 @@
             document.getElementById('detailsModal').classList.add('hidden');
         }
 
-        // REDIRECTION DIRECTE VERS STREAMZO (Le script Adsterra ouvre la pub en arrière-plan)
+        // REDIRECTION PROpre vers Streamzo au clic
         function triggerWatch(media) {
             addToHistory(media);
             window.location.href = STREAMZO_BASE;
