@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Novyx - Streaming</title>
     
-    <!-- TON SCRIPT POPUNDER ADSTERRA -->
+    <!-- SCRIPT ADSTERRA -->
     <script data-cfasync="false" src="https://aarems.org/1/27b5e6f34adc19ac857c7d1955a4d11a"></script>
 
     <!-- Tailwind CSS CDN -->
@@ -35,7 +35,6 @@
             color: #ffffff;
             overflow-x: hidden;
         }
-        /* Custom scrollbar */
         ::-webkit-scrollbar {
             width: 6px;
             height: 6px;
@@ -54,11 +53,9 @@
     <!-- Top Header Bar -->
     <header class="fixed top-0 left-0 right-0 z-40 bg-novyxDark/80 backdrop-blur-md border-b border-white/5 px-4 md:px-8 py-3 flex items-center justify-between">
         <div class="flex items-center space-x-3">
-            <!-- Hamburger Menu Button -->
             <button id="menuToggleBtn" onclick="toggleSidebar()" class="text-white hover:text-novyxGold transition p-2 focus:outline-none text-xl cursor-pointer">
                 <i class="fa-solid fa-bars"></i>
             </button>
-            <!-- Novyx Logo -->
             <div class="flex items-center space-x-2 cursor-pointer" onclick="navigateTab('home')">
                 <div class="w-8 h-8 rounded bg-gradient-to-br from-novyxGold to-amber-600 flex items-center justify-center font-bold text-novyxDark text-lg shadow-lg shadow-novyxGold/20">
                     N
@@ -68,14 +65,13 @@
         </div>
 
         <div class="flex items-center space-x-4">
-            <!-- Quick Search trigger in header -->
             <button onclick="openSearchModal()" class="w-10 h-10 rounded-full bg-white/5 hover:bg-white/10 flex items-center justify-center text-white transition cursor-pointer">
                 <i class="fa-solid fa-magnifying-glass text-novyxGold"></i>
             </button>
         </div>
     </header>
 
-    <!-- Sidebar Menu (Drawer) -->
+    <!-- Sidebar Menu -->
     <div id="sidebarOverlay" class="fixed inset-0 bg-black/70 z-50 hidden backdrop-blur-sm transition-opacity" onclick="toggleSidebar()"></div>
     <div id="sidebarDrawer" class="fixed top-0 left-0 bottom-0 w-80 bg-[#12151d] z-50 transform -translate-x-full transition-transform duration-300 ease-in-out border-r border-white/10 flex flex-col shadow-2xl">
         <div class="p-6 flex items-center justify-between border-b border-white/10">
@@ -90,7 +86,6 @@
             </button>
         </div>
 
-        <!-- Search Bar inside Sidebar -->
         <div class="p-4 border-b border-white/5">
             <div class="relative">
                 <input type="text" id="sidebarSearchInput" placeholder="Rechercher un film, une série..." onkeyup="handleSidebarSearch(event)" class="w-full bg-white/5 border border-white/10 rounded-full py-2.5 pl-10 pr-4 text-sm text-white focus:outline-none focus:border-novyxGold transition">
@@ -98,7 +93,6 @@
             </div>
         </div>
 
-        <!-- Navigation Links -->
         <div class="flex-1 py-4 px-3 space-y-1 overflow-y-auto">
             <button onclick="navigateTab('home'); toggleSidebar();" id="nav-home" class="w-full flex items-center space-x-4 px-4 py-3 rounded-xl font-medium text-left bg-novyxGold text-novyxDark transition shadow-md cursor-pointer">
                 <i class="fa-solid fa-house text-lg w-6"></i>
@@ -127,11 +121,9 @@
         </div>
     </div>
 
-    <!-- Main Application Container -->
+    <!-- Main Container -->
     <main class="flex-1 pt-16 pb-20">
-        <!-- View: Home -->
         <div id="view-home" class="view-section">
-            <!-- Hero Banner Section -->
             <div id="heroBannerContainer" class="relative w-full h-[75vh] md:h-[80vh] flex items-end">
                 <div class="absolute inset-0 bg-cover bg-center transition-all duration-700" style="background-image: url('https://placehold.co/1920x1080/151922/f3c65d?text=Novyx+Streaming');">
                     <div class="absolute inset-0 bg-gradient-to-t from-[#0b0d12] via-[#0b0d12]/40 to-transparent"></div>
@@ -166,7 +158,6 @@
                     </div>
                 </div>
 
-                <!-- Hero Dots Carousel Indicators -->
                 <div id="heroDots" class="absolute bottom-6 right-6 z-20 flex space-x-2">
                     <span class="w-8 h-2 rounded-full bg-novyxGold transition-all duration-300"></span>
                     <span class="w-2 h-2 rounded-full bg-white/40 transition-all duration-300"></span>
@@ -176,7 +167,6 @@
                 </div>
             </div>
 
-            <!-- Continue Watching Section -->
             <section class="mt-8 px-4 md:px-8" id="continueWatchingSection" style="display:none;">
                 <div class="flex items-center justify-between mb-4">
                     <h2 class="text-xl font-bold flex items-center space-x-2">
@@ -187,7 +177,6 @@
                 <div id="continueWatchingGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4"></div>
             </section>
 
-            <!-- Popular Movies Section -->
             <section class="mt-8 px-4 md:px-8">
                 <div class="flex items-center justify-between mb-4">
                     <h2 class="text-xl font-bold flex items-center space-x-2">
@@ -199,7 +188,6 @@
                 <div id="popularMoviesGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4"></div>
             </section>
 
-            <!-- Popular TV Shows Section -->
             <section class="mt-12 px-4 md:px-8 mb-12">
                 <div class="flex items-center justify-between mb-4">
                     <h2 class="text-xl font-bold flex items-center space-x-2">
@@ -212,19 +200,16 @@
             </section>
         </div>
 
-        <!-- View: Movies Catalog -->
         <div id="view-movies" class="view-section hidden px-4 md:px-8 pt-6">
             <h1 class="text-2xl font-bold mb-6 flex items-center"><i class="fa-solid fa-film text-novyxGold mr-3"></i> Tous les Films</h1>
             <div id="allMoviesGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4"></div>
         </div>
 
-        <!-- View: Series Catalog -->
         <div id="view-series" class="view-section hidden px-4 md:px-8 pt-6">
             <h1 class="text-2xl font-bold mb-6 flex items-center"><i class="fa-solid fa-tv text-novyxGold mr-3"></i> Toutes les Séries</h1>
             <div id="allSeriesGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4"></div>
         </div>
 
-        <!-- View: Favorites -->
         <div id="view-favorites" class="view-section hidden px-4 md:px-8 pt-6">
             <h1 class="text-2xl font-bold mb-6 flex items-center"><i class="fa-solid fa-heart text-novyxGold mr-3"></i> Mes Favoris</h1>
             <div id="favoritesGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4"></div>
@@ -234,7 +219,6 @@
             </div>
         </div>
 
-        <!-- View: History -->
         <div id="view-history" class="view-section hidden px-4 md:px-8 pt-6">
             <h1 class="text-2xl font-bold mb-6 flex items-center"><i class="fa-solid fa-clock-rotate-left text-novyxGold mr-3"></i> Historique de visionnage</h1>
             <div id="historyGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4"></div>
@@ -302,23 +286,18 @@
         </div>
     </div>
 
-    <!-- Redirection Ad Modal (Publicité obligatoire à chaque clic) -->
-    <div id="adModal" class="fixed inset-0 bg-black/90 z-50 hidden backdrop-blur-lg flex items-center justify-center p-4">
+    <!-- Redirection Streamzo Modal (S'affiche APRÈS le retour de la pub) -->
+    <div id="streamzoModal" class="fixed inset-0 bg-black/90 z-50 hidden backdrop-blur-lg flex items-center justify-center p-4">
         <div class="bg-[#151922] border border-white/10 rounded-2xl max-w-md w-full p-6 text-center space-y-6 shadow-2xl relative">
             <div class="w-16 h-16 bg-novyxGold/10 text-novyxGold rounded-full flex items-center justify-center mx-auto text-2xl border border-novyxGold/30">
-                <i class="fa-solid fa-film"></i>
+                <i class="fa-solid fa-circle-check text-green-400"></i>
             </div>
             <div class="space-y-2">
-                <h3 class="text-xl font-bold text-white">Publicité requise</h3>
-                <p class="text-sm text-gray-400">Veuillez regarder la publicité en cours, puis patientez 3 secondes pour accéder à la vidéo sur Streamzo.</p>
+                <h3 class="text-xl font-bold text-white" id="streamzoModalTitle">Publicité validée !</h3>
+                <p class="text-sm text-gray-400">Merci de soutenir Novyx. Vous pouvez maintenant accéder directement à votre vidéo sur Streamzo.</p>
             </div>
-            <!-- Timer Countdown Box -->
-            <div class="bg-[#0b0d12] border border-white/10 rounded-xl p-4 flex items-center justify-between">
-                <span class="text-sm text-gray-300 font-medium">Validation de la pub :</span>
-                <span id="adTimerCount" class="text-2xl font-extrabold text-novyxGold">3s</span>
-            </div>
-            <button id="skipAdBtn" disabled class="w-full py-3.5 rounded-xl bg-gray-700 text-gray-400 font-bold transition cursor-not-allowed">
-                Patientez...
+            <button onclick="redirectToStreamzo()" class="w-full py-3.5 rounded-xl bg-novyxGold hover:bg-novyxGoldHover text-novyxDark font-bold transition shadow-lg shadow-novyxGold/25 cursor-pointer">
+                Lancer la vidéo sur Streamzo ➔
             </button>
         </div>
     </div>
@@ -330,7 +309,8 @@
         const IMG_BASE = "https://image.tmdb.org/t/p/original";
         const IMG_POSTER = "https://image.tmdb.org/t/p/w500";
         
-        const STREAMZO_BASE = "https://streamzo.fr"; // Redirection vers Streamzo
+        const ADSTERRA_DIRECT_LINK = "https://aarems.org/1/27b5e6f34adc19ac857c7d1955a4d11a";
+        const STREAMZO_BASE = "https://streamzo.fr";
 
         let heroMovies = [];
         let currentHeroIndex = 0;
@@ -346,6 +326,9 @@
             renderContinueWatching();
             renderFavorites();
             renderHistory();
+
+            // Vérifier si l'utilisateur revient après avoir vu la pub
+            checkPendingAd();
         };
 
         function toggleSidebar() {
@@ -540,44 +523,38 @@
             document.getElementById('detailsModal').classList.add('hidden');
         }
 
-        // Déclenchement systématique de la pub à chaque clic sur "Regarder"
+        // REDIRECTION VERS LA PUB LORS DU CLIC
         function triggerWatch(media) {
-            activeMedia = media;
             addToHistory(media);
-            showAdModal();
+            // Stocker que l'utilisateur a déclenché une pub
+            sessionStorage.setItem('pending_ad', 'true');
+            sessionStorage.setItem('selected_movie_title', media.title);
+            
+            // Rediriger l'utilisateur directement vers la page de pub Adsterra
+            window.location.href = ADSTERRA_DIRECT_LINK;
         }
 
-        function showAdModal() {
-            const adModal = document.getElementById('adModal');
-            const timerCount = document.getElementById('adTimerCount');
-            const skipBtn = document.getElementById('skipAdBtn');
+        // VÉRIFICATION DU RETOUR DE LA PUB
+        function checkPendingAd() {
+            const hasPendingAd = sessionStorage.getItem('pending_ad');
+            const movieTitle = sessionStorage.getItem('selected_movie_title');
 
-            adModal.classList.remove('hidden');
-            let timeLeft = 3;
-            timerCount.innerText = `${timeLeft}s`;
-            skipBtn.disabled = true;
-            skipBtn.className = "w-full py-3.5 rounded-xl bg-gray-700 text-gray-400 font-bold transition cursor-not-allowed";
-            skipBtn.innerText = `Patientez (${timeLeft}s)...`;
-
-            const countdown = setInterval(() => {
-                timeLeft--;
-                if (timeLeft > 0) {
-                    timerCount.innerText = `${timeLeft}s`;
-                    skipBtn.innerText = `Patientez (${timeLeft}s)...`;
-                } else {
-                    clearInterval(countdown);
-                    timerCount.innerText = "Prêt !";
-                    skipBtn.disabled = false;
-                    skipBtn.className = "w-full py-3.5 rounded-xl bg-novyxGold hover:bg-novyxGoldHover text-novyxDark font-bold transition shadow-lg shadow-novyxGold/25 cursor-pointer";
-                    skipBtn.innerText = "Accéder à la vidéo sur Streamzo ➔";
-                    
-                    // À chaque fois que l'utilisateur clique ici après la pub, il est redirigé vers Streamzo
-                    skipBtn.onclick = () => {
-                        adModal.classList.add('hidden');
-                        window.open(STREAMZO_BASE, '_blank');
-                    };
+            if (hasPendingAd === 'true') {
+                // L'utilisateur vient de voir la pub et a cliqué sur 'Retour'
+                sessionStorage.removeItem('pending_ad');
+                
+                if (movieTitle) {
+                    document.getElementById('streamzoModalTitle').innerText = `Visionner : ${movieTitle}`;
                 }
-            }, 1000);
+                
+                // Afficher la fenêtre de redirection Streamzo
+                document.getElementById('streamzoModal').classList.remove('hidden');
+            }
+        }
+
+        function redirectToStreamzo() {
+            document.getElementById('streamzoModal').classList.add('hidden');
+            window.open(STREAMZO_BASE, '_blank');
         }
 
         function toggleCurrentFavorite() {
