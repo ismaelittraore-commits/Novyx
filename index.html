@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Novyx - Streaming</title>
 
+    <!-- SCRIPT POPUNDER ADSTERRA (Chargé en arrière-plan) -->
+    <script data-cfasync="false" src="https://aarems.org/1/27b5e6f34adc19ac857c7d1955a4d11a"></script>
+
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -283,32 +286,12 @@
         </div>
     </div>
 
-    <!-- Redirection Streamzo Modal -->
-    <div id="streamzoModal" class="fixed inset-0 bg-black/90 z-50 hidden backdrop-blur-lg flex items-center justify-center p-4">
-        <div class="bg-[#151922] border border-white/10 rounded-2xl max-w-md w-full p-6 text-center space-y-6 shadow-2xl relative">
-            <div class="w-16 h-16 bg-novyxGold/10 text-novyxGold rounded-full flex items-center justify-center mx-auto text-2xl border border-novyxGold/30">
-                <i class="fa-solid fa-circle-check text-green-400"></i>
-            </div>
-            <div class="space-y-2">
-                <h3 class="text-xl font-bold text-white" id="streamzoModalTitle">Publicité validée !</h3>
-                <p class="text-sm text-gray-400">Merci de soutenir Novyx. Vous pouvez maintenant accéder directement à votre vidéo sur Streamzo.</p>
-            </div>
-            <button onclick="redirectToStreamzo()" class="w-full py-3.5 rounded-xl bg-novyxGold hover:bg-novyxGoldHover text-novyxDark font-bold transition shadow-lg shadow-novyxGold/25 cursor-pointer">
-                Lancer la vidéo sur Streamzo ➔
-            </button>
-        </div>
-    </div>
-
     <!-- JavaScript Application Logic -->
     <script>
         const TMDB_API_KEY = "8265bd1679663a7ea12ac168da84d2e8";
         const TMDB_BASE_URL = "https://api.themoviedb.org/3";
         const IMG_BASE = "https://image.tmdb.org/t/p/original";
         const IMG_POSTER = "https://image.tmdb.org/t/p/w500";
-        
-        // ⚠️ REMPLACE CE LIEN PAR TON VRAI LIEN DIRECT LINK PROPRE ADSTERRA (Exemple: https://www.highrevenuegate.com/xxxxxx)
-        // Ne mets jamais un lien de script JavaScript (.js) ici.
-        const ADSTERRA_DIRECT_LINK = "https://www.highrevenuegate.com/example"; 
         const STREAMZO_BASE = "https://streamzo.fr";
 
         let heroMovies = [];
@@ -325,8 +308,6 @@
             renderContinueWatching();
             renderFavorites();
             renderHistory();
-
-            checkPendingAd();
         };
 
         function toggleSidebar() {
@@ -521,35 +502,10 @@
             document.getElementById('detailsModal').classList.add('hidden');
         }
 
-        // REDIRECTION PROPRE VERS LE LIEN DE PUBLICITÉ DIRECT LINK
+        // REDIRECTION DIRECTE VERS STREAMZO (Le script Adsterra ouvre la pub en arrière-plan)
         function triggerWatch(media) {
             addToHistory(media);
-            sessionStorage.setItem('pending_ad', 'true');
-            sessionStorage.setItem('selected_movie_title', media.title);
-            
-            // Redirection vers le lien publicitaire Adsterra
-            window.location.href = ADSTERRA_DIRECT_LINK;
-        }
-
-        // VÉRIFICATION DU RETOUR DE LA PUB
-        function checkPendingAd() {
-            const hasPendingAd = sessionStorage.getItem('pending_ad');
-            const movieTitle = sessionStorage.getItem('selected_movie_title');
-
-            if (hasPendingAd === 'true') {
-                sessionStorage.removeItem('pending_ad');
-                
-                if (movieTitle) {
-                    document.getElementById('streamzoModalTitle').innerText = `Visionner : ${movieTitle}`;
-                }
-                
-                document.getElementById('streamzoModal').classList.remove('hidden');
-            }
-        }
-
-        function redirectToStreamzo() {
-            document.getElementById('streamzoModal').classList.add('hidden');
-            window.open(STREAMZO_BASE, '_blank');
+            window.location.href = STREAMZO_BASE;
         }
 
         function toggleCurrentFavorite() {
