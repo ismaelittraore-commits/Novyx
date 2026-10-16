@@ -1,590 +1,721 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Novyx — Films & Séries en Streaming HD</title>
+    <title>Novyx - Streaming</title>
+    
+    <!-- TON SCRIPT POPUNDER ADSTERRA -->
+    <script data-cfasync="false" src="https://aarems.org/1/27b5e6f34adc19ac857c7d1955a4d11a"></script>
 
-    <!-- SCRIPT POPUNDER ADSTERRA -->
-    <script type="text/javascript" src="//pl26149405.pvourt.com/97/58/b0/9758b0f49a21d1dcbcf1d29e3dd1d293.js"></script>
-
-    <!-- POLICES GOOGLE (Style Streamzo) -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        novyxDark: '#0b0d12',
+                        novyxCard: '#151922',
+                        novyxGold: '#f3c65d',
+                        novyxGoldHover: '#d4aa48',
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root {
-            --bg-main: #0c0d10;
-            --bg-card: #14151a;
-            --gold: #e5be65;
-            --gold-hover: #d4ab4f;
-            --text-light: #e1e1e6;
-            --text-dim: #8c8d96;
-            --btn-dark: #1e2026;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            -webkit-tap-highlight-color: transparent;
-        }
-
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap');
         body {
-            background-color: var(--bg-main);
-            color: var(--text-light);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #0b0d12;
+            color: #ffffff;
             overflow-x: hidden;
-            min-height: 100vh;
         }
-
-        /* HEADER / BARRE DE NAVIGATION */
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 16px 20px;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 50;
-            background: linear-gradient(180deg, rgba(12,13,16,0.95) 0%, rgba(12,13,16,0) 100%);
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
         }
-
-        .logo-container {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            text-decoration: none;
+        ::-webkit-scrollbar-track {
+            background: #0b0d12;
         }
-
-        .logo-icon {
-            color: var(--gold);
-            font-size: 22px;
-            font-weight: bold;
-        }
-
-        .logo-text {
-            font-size: 22px;
-            font-weight: 800;
-            color: #ffffff;
-            letter-spacing: -0.5px;
-        }
-
-        .header-actions {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
-
-        .icon-btn {
-            background: none;
-            border: none;
-            color: #ffffff;
-            font-size: 20px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 36px;
-            height: 36px;
-        }
-
-        /* MENU LATÉRAL COULISSANT */
-        .side-menu {
-            position: fixed;
-            top: 0;
-            right: -100%;
-            width: 82%;
-            max-width: 340px;
-            height: 100%;
-            background-color: #111216;
-            z-index: 100;
-            transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            padding: 24px 20px;
-            display: flex;
-            flex-direction: column;
-            box-shadow: -10px 0 30px rgba(0,0,0,0.8);
-        }
-
-        .side-menu.active {
-            right: 0;
-        }
-
-        .menu-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.7);
-            backdrop-filter: blur(4px);
-            z-index: 90;
-            display: none;
-        }
-
-        .menu-overlay.active {
-            display: block;
-        }
-
-        .menu-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 24px;
-        }
-
-        .close-menu-btn {
-            background: rgba(255,255,255,0.08);
-            border: none;
-            color: #fff;
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            font-size: 18px;
-            cursor: pointer;
-        }
-
-        .search-box {
-            position: relative;
-            margin-bottom: 24px;
-        }
-
-        .search-box input {
-            width: 100%;
-            padding: 14px 48px 14px 16px;
-            background: #1a1b22;
-            border: 1px solid rgba(255,255,255,0.05);
-            border-radius: 25px;
-            color: #fff;
-            font-size: 14px;
-            outline: none;
-        }
-
-        .search-box .search-btn {
-            position: absolute;
-            right: 4px;
-            top: 4px;
-            width: 38px;
-            height: 38px;
-            background: var(--gold);
-            border: none;
-            border-radius: 50%;
-            color: #000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-        }
-
-        .menu-nav {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .menu-item {
-            padding: 14px 18px;
-            color: var(--text-dim);
-            text-decoration: none;
-            font-size: 16px;
-            font-weight: 500;
-            border-radius: 12px;
-            transition: all 0.2s;
-        }
-
-        .menu-item.active {
-            background: #22201c;
-            color: #ffffff;
-            border-left: 3px solid var(--gold);
-            font-weight: 600;
-        }
-
-        /* SECTION À LA UNE (HERO BANNER) */
-        .hero {
-            position: relative;
-            min-height: 80vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-end;
-            padding: 0 20px 30px;
-            background: linear-gradient(180deg, rgba(12,13,16,0.2) 0%, rgba(12,13,16,0.9) 75%, #0c0d10 100%), 
-                        url('https://images.unsplash.com/photo-1534447677768-be436bb09401?q=80&w=1000') center/cover no-repeat;
-        }
-
-        .badge-a-la-une {
-            color: var(--gold);
-            font-size: 12px;
-            font-weight: 700;
-            letter-spacing: 2px;
-            margin-bottom: 12px;
-            text-transform: uppercase;
-        }
-
-        .hero-title {
-            font-family: 'Cinzel', serif;
-            font-size: 32px;
-            line-height: 1.15;
-            font-weight: 700;
-            color: #ffffff;
-            margin-bottom: 12px;
-            max-width: 90%;
-        }
-
-        .hero-meta {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-size: 13px;
-            color: var(--text-dim);
-            margin-bottom: 16px;
-            font-weight: 500;
-        }
-
-        .rating {
-            color: #ffffff;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            font-weight: 700;
-        }
-
-        .rating-star {
-            color: var(--gold);
-        }
-
-        .hero-description {
-            font-size: 13px;
-            line-height: 1.5;
-            color: var(--text-dim);
-            margin-bottom: 24px;
-            display: -webkit-box;
-            -webkit-line-clamp: 3;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-        }
-
-        .hero-buttons {
-            display: flex;
-            gap: 12px;
-            margin-bottom: 24px;
-        }
-
-        .btn-primary {
-            flex: 1;
-            background: var(--gold);
-            color: #0d0e11;
-            border: none;
-            padding: 14px 20px;
-            border-radius: 25px;
-            font-weight: 700;
-            font-size: 15px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            cursor: pointer;
-            box-shadow: 0 4px 15px rgba(229, 190, 101, 0.2);
-        }
-
-        .btn-secondary {
-            flex: 1;
-            background: var(--btn-dark);
-            color: #ffffff;
-            border: 1px solid rgba(255,255,255,0.08);
-            padding: 14px 20px;
-            border-radius: 25px;
-            font-weight: 600;
-            font-size: 15px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            cursor: pointer;
-        }
-
-        /* DOTS CARROUSEL */
-        .carousel-dots {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: rgba(255,255,255,0.2);
-        }
-
-        .dot.active {
-            width: 32px;
-            height: 8px;
-            border-radius: 4px;
-            background: var(--gold);
-        }
-
-        /* SECTION CONTINUER À REGARDER */
-        .section {
-            padding: 24px 0 24px 20px;
-        }
-
-        .section-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding-right: 20px;
-            margin-bottom: 16px;
-        }
-
-        .section-title-box {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .clock-icon {
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            background: rgba(229, 190, 101, 0.1);
-            border: 1px solid rgba(229, 190, 101, 0.3);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--gold);
-            font-size: 13px;
-        }
-
-        .section-title {
-            font-family: 'Cinzel', serif;
-            font-size: 18px;
-            font-weight: 600;
-            color: #ffffff;
-        }
-
-        .see-all {
-            color: var(--text-dim);
-            text-decoration: none;
-            font-size: 13px;
-            font-weight: 500;
-        }
-
-        .scroll-cards {
-            display: flex;
-            gap: 14px;
-            overflow-x: auto;
-            scroll-behavior: smooth;
-            padding-right: 20px;
-            scrollbar-width: none;
-        }
-
-        .scroll-cards::-webkit-scrollbar {
-            display: none;
-        }
-
-        .card {
-            flex: 0 0 140px;
-            border-radius: 12px;
-            overflow: hidden;
-            background: var(--bg-card);
-            cursor: pointer;
-        }
-
-        .card img {
-            width: 100%;
-            height: 190px;
-            object-fit: cover;
-            display: block;
-            border-radius: 12px;
-        }
-
-        /* POPUP DE REDIRECTION */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.85);
-            backdrop-filter: blur(8px);
-            z-index: 200;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
-
-        .modal-content {
-            background: #14151a;
-            border: 1px solid rgba(229, 190, 101, 0.2);
-            border-radius: 20px;
-            padding: 28px 20px;
-            text-align: center;
-            max-width: 380px;
-            width: 100%;
-        }
-
-        .modal-title {
-            font-family: 'Cinzel', serif;
-            font-size: 20px;
-            color: #ffffff;
-            margin-bottom: 12px;
-        }
-
-        .modal-text {
-            font-size: 14px;
-            color: var(--text-dim);
-            line-height: 1.5;
-            margin-bottom: 24px;
-        }
-
-        .modal-btn {
-            background: var(--gold);
-            color: #000;
-            border: none;
-            padding: 14px 24px;
-            border-radius: 25px;
-            font-weight: 700;
-            font-size: 15px;
-            width: 100%;
-            cursor: pointer;
+        ::-webkit-scrollbar-thumb {
+            background: #252a37;
+            border-radius: 3px;
         }
     </style>
 </head>
-<body>
+<body class="bg-novyxDark text-white min-h-screen flex flex-col">
 
-    <!-- EN-TÊTE NOVYX -->
-    <header>
-        <a href="#" class="logo-container">
-            <span class="logo-icon">S</span>
-            <span class="logo-text">Novyx</span>
-        </a>
-        <div class="header-actions">
-            <button class="icon-btn" onclick="toggleMenu()">🔍</button>
-            <button class="icon-btn" onclick="toggleMenu()">☰</button>
+    <!-- Top Header Bar -->
+    <header class="fixed top-0 left-0 right-0 z-40 bg-novyxDark/80 backdrop-blur-md border-b border-white/5 px-4 md:px-8 py-3 flex items-center justify-between">
+        <div class="flex items-center space-x-3">
+            <!-- Hamburger Menu Button -->
+            <button id="menuToggleBtn" onclick="toggleSidebar()" class="text-white hover:text-novyxGold transition p-2 focus:outline-none text-xl">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+            <!-- Novyx Logo -->
+            <div class="flex items-center space-x-2 cursor-pointer" onclick="navigateTab('home')">
+                <div class="w-8 h-8 rounded bg-gradient-to-br from-novyxGold to-amber-600 flex items-center justify-center font-bold text-novyxDark text-lg shadow-lg shadow-novyxGold/20">
+                    N
+                </div>
+                <span class="text-xl font-bold tracking-wider text-white">Novyx</span>
+            </div>
+        </div>
+
+        <div class="flex items-center space-x-4">
+            <!-- Quick Search trigger in header -->
+            <button onclick="openSearchModal()" class="w-10 h-10 rounded-full bg-white/5 hover:bg-white/10 flex items-center justify-center text-white transition">
+                <i class="fa-solid fa-magnifying-glass text-novyxGold"></i>
+            </button>
         </div>
     </header>
 
-    <!-- MENU COULISSANT -->
-    <div class="menu-overlay" id="menuOverlay" onclick="toggleMenu()"></div>
-    <div class="side-menu" id="sideMenu">
-        <div class="menu-header">
-            <a href="#" class="logo-container">
-                <span class="logo-icon">S</span>
-                <span class="logo-text">Novyx</span>
-            </a>
-            <button class="close-menu-btn" onclick="toggleMenu()">✕</button>
-        </div>
-
-        <div class="search-box">
-            <input type="text" placeholder="Rechercher un film, une série...">
-            <button class="search-btn">🔍</button>
-        </div>
-
-        <nav class="menu-nav">
-            <a href="#" class="menu-item active">Accueil</a>
-            <a href="#" class="menu-item">Films</a>
-            <a href="#" class="menu-item">Séries</a>
-            <a href="#" class="menu-item">Favoris</a>
-            <a href="#" class="menu-item">Historique</a>
-        </nav>
-    </div>
-
-    <!-- BANNIÈRE À LA UNE -->
-    <section class="hero">
-        <div class="badge-a-la-une">À LA UNE</div>
-        <h1 class="hero-title">Avatar Aang, le dernier maître de l'air</h1>
-        
-        <div class="hero-meta">
-            <span class="rating"><span class="rating-star">★</span> 9.1</span>
-            <span>•</span>
-            <span>2026</span>
-            <span>•</span>
-            <span>1h 39min</span>
-            <span>•</span>
-            <span>Animation</span>
-        </div>
-
-        <p class="hero-description">
-            Avatar Aang, le dernier Maître de l'Air, apprend l'existence d'un pouvoir ancestral qui pourrait sauver sa culture. Avec ses amis, il se lance dans...
-        </p>
-
-        <div class="hero-buttons">
-            <button class="btn-primary" onclick="playMovie('Avatar Aang, le dernier maître de l\'air', 'https://streamzo.fr')">
-                ▶ Regarder
-            </button>
-            <button class="btn-secondary" onclick="playMovie('Avatar Aang, le dernier maître de l\'air', 'https://streamzo.fr')">
-                ⓘ Détails
+    <!-- Sidebar Menu (Drawer) -->
+    <div id="sidebarOverlay" class="fixed inset-0 bg-black/70 z-50 hidden backdrop-blur-sm transition-opacity" onclick="toggleSidebar()"></div>
+    <div id="sidebarDrawer" class="fixed top-0 left-0 bottom-0 w-80 bg-[#12151d] z-50 transform -translate-x-full transition-transform duration-300 ease-in-out border-r border-white/10 flex flex-col shadow-2xl">
+        <div class="p-6 flex items-center justify-between border-b border-white/10">
+            <div class="flex items-center space-x-2">
+                <div class="w-8 h-8 rounded bg-gradient-to-br from-novyxGold to-amber-600 flex items-center justify-center font-bold text-novyxDark text-lg">
+                    N
+                </div>
+                <span class="text-xl font-bold tracking-wider text-white">Novyx</span>
+            </div>
+            <button onclick="toggleSidebar()" class="text-gray-400 hover:text-white text-xl p-2">
+                <i class="fa-solid fa-xmark"></i>
             </button>
         </div>
 
-        <div class="carousel-dots">
-            <div class="dot active"></div>
-            <div class="dot"></div>
-            <div class="dot"></div>
-            <div class="dot"></div>
-            <div class="dot"></div>
-            <div class="dot"></div>
-        </div>
-    </section>
-
-    <!-- SECTION CONTINUER À REGARDER -->
-    <section class="section">
-        <div class="section-header">
-            <div class="section-title-box">
-                <div class="clock-icon">🕒</div>
-                <h2 class="section-title">Continuer à regarder</h2>
-            </div>
-            <a href="#" class="see-all">Voir tout &gt;</a>
-        </div>
-
-        <div class="scroll-cards">
-            <div class="card" onclick="playMovie('Black Panther', 'https://streamzo.fr')">
-                <img src="https://images.unsplash.com/photo-1568832359672-e36cf5d74f54?q=80&w=300" alt="Film">
-            </div>
-            <div class="card" onclick="playMovie('Avengers', 'https://streamzo.fr')">
-                <img src="https://images.unsplash.com/photo-1635805737707-575885ab0820?q=80&w=300" alt="Film">
-            </div>
-            <div class="card" onclick="playMovie('Film 3', 'https://streamzo.fr')">
-                <img src="https://images.unsplash.com/photo-1536440136628-849c177e76a1?q=80&w=300" alt="Film">
-            </div>
-            <div class="card" onclick="playMovie('Film 4', 'https://streamzo.fr')">
-                <img src="https://images.unsplash.com/photo-1509198397868-475647b2a1e5?q=80&w=300" alt="Film">
+        <!-- Search Bar inside Sidebar -->
+        <div class="p-4 border-b border-white/5">
+            <div class="relative">
+                <input type="text" id="sidebarSearchInput" placeholder="Rechercher un film, une série..." onkeyup="handleSidebarSearch(event)" class="w-full bg-white/5 border border-white/10 rounded-full py-2.5 pl-10 pr-4 text-sm text-white focus:outline-none focus:border-novyxGold transition">
+                <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3 text-novyxGold text-sm"></i>
             </div>
         </div>
-    </section>
 
-    <!-- FENÊTRE MODALE DE LECTURE -->
-    <div class="modal" id="playModal">
-        <div class="modal-content">
-            <h3 class="modal-title" id="modalMovieTitle">Lancement du Film</h3>
-            <p class="modal-text">Vous devez cliquer sur le bouton ci-dessous pour lancer la vidéo et accéder au lecteur complet sur Streamzo.</p>
-            <button class="modal-btn" onclick="confirmRedirect()">Regarder le film ➔</button>
+        <!-- Navigation Links -->
+        <div class="flex-1 py-4 px-3 space-y-1 overflow-y-auto">
+            <button onclick="navigateTab('home'); toggleSidebar();" id="nav-home" class="w-full flex items-center space-x-4 px-4 py-3 rounded-xl font-medium text-left bg-novyxGold text-novyxDark transition shadow-md">
+                <i class="fa-solid fa-house text-lg w-6"></i>
+                <span>Accueil</span>
+            </button>
+            <button onclick="navigateTab('movies'); toggleSidebar();" id="nav-movies" class="w-full flex items-center space-x-4 px-4 py-3 rounded-xl font-medium text-left text-gray-300 hover:bg-white/5 hover:text-white transition">
+                <i class="fa-solid fa-film text-lg w-6"></i>
+                <span>Films</span>
+            </button>
+            <button onclick="navigateTab('series'); toggleSidebar();" id="nav-series" class="w-full flex items-center space-x-4 px-4 py-3 rounded-xl font-medium text-left text-gray-300 hover:bg-white/5 hover:text-white transition">
+                <i class="fa-solid fa-tv text-lg w-6"></i>
+                <span>Séries</span>
+            </button>
+            <button onclick="navigateTab('favorites'); toggleSidebar();" id="nav-favorites" class="w-full flex items-center space-x-4 px-4 py-3 rounded-xl font-medium text-left text-gray-300 hover:bg-white/5 hover:text-white transition">
+                <i class="fa-solid fa-heart text-lg w-6"></i>
+                <span>Favoris</span>
+            </button>
+            <button onclick="navigateTab('history'); toggleSidebar();" id="nav-history" class="w-full flex items-center space-x-4 px-4 py-3 rounded-xl font-medium text-left text-gray-300 hover:bg-white/5 hover:text-white transition">
+                <i class="fa-solid fa-clock-rotate-left text-lg w-6"></i>
+                <span>Historique</span>
+            </button>
+        </div>
+
+        <div class="p-4 border-t border-white/10 text-xs text-center text-gray-500">
+            Novyx Streaming v2.6 • TMDB Powered
         </div>
     </div>
 
+    <!-- Main Application Container -->
+    <main class="flex-1 pt-16 pb-20">
+        <!-- View: Home -->
+        <div id="view-home" class="view-section">
+            <!-- Hero Banner Section -->
+            <div id="heroBannerContainer" class="relative w-full h-[75vh] md:h-[80vh] flex items-end">
+                <div class="absolute inset-0 bg-cover bg-center transition-all duration-700" style="background-image: url('https://placehold.co/1920x1080/151922/f3c65d?text=Novyx+Streaming');">
+                    <div class="absolute inset-0 bg-gradient-to-t from-[#0b0d12] via-[#0b0d12]/40 to-transparent"></div>
+                    <div class="absolute inset-0 bg-gradient-to-r from-[#0b0d12] via-transparent to-transparent"></div>
+                </div>
+
+                <div class="relative z-10 p-6 md:p-12 max-w-3xl space-y-4">
+                    <div class="inline-block text-xs uppercase tracking-widest text-novyxGold font-bold px-3 py-1 rounded bg-novyxGold/10 border border-novyxGold/30">
+                        À la une
+                    </div>
+                    <h1 id="heroTitle" class="text-3xl md:text-5xl font-extrabold tracking-tight text-white leading-tight">
+                        Chargement...
+                    </h1>
+                    <div class="flex items-center space-x-4 text-sm font-semibold text-gray-300">
+                        <span id="heroRating" class="flex items-center text-novyxGold"><i class="fa-solid fa-star mr-1.5"></i> -</span>
+                        <span id="heroYear" class="text-gray-400">-</span>
+                        <span id="heroDuration" class="text-gray-400">-</span>
+                        <span id="heroGenre" class="bg-white/10 px-2.5 py-0.5 rounded text-xs text-gray-200">-</span>
+                    </div>
+                    <p id="heroOverview" class="text-gray-300 text-sm md:text-base line-clamp-3 leading-relaxed">
+                        Veuillez patienter pendant que nous récupérons les tendances du moment...
+                    </p>
+                    <div class="flex items-center space-x-4 pt-2">
+                        <button id="heroWatchBtn" class="flex items-center space-x-3 bg-novyxGold hover:bg-novyxGoldHover text-novyxDark px-7 py-3.5 rounded-full font-bold transition shadow-lg shadow-novyxGold/25 cursor-pointer">
+                            <i class="fa-solid fa-play"></i>
+                            <span>Regarder</span>
+                        </button>
+                        <button id="heroDetailsBtn" class="flex items-center space-x-3 bg-white/10 hover:bg-white/20 text-white px-7 py-3.5 rounded-full font-bold transition backdrop-blur-md border border-white/10 cursor-pointer">
+                            <i class="fa-solid fa-circle-info"></i>
+                            <span>Détails</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Hero Dots Carousel Indicators -->
+                <div id="heroDots" class="absolute bottom-6 right-6 z-20 flex space-x-2">
+                    <span class="w-8 h-2 rounded-full bg-novyxGold transition-all duration-300"></span>
+                    <span class="w-2 h-2 rounded-full bg-white/40 transition-all duration-300"></span>
+                    <span class="w-2 h-2 rounded-full bg-white/40 transition-all duration-300"></span>
+                    <span class="w-2 h-2 rounded-full bg-white/40 transition-all duration-300"></span>
+                    <span class="w-2 h-2 rounded-full bg-white/40 transition-all duration-300"></span>
+                </div>
+            </div>
+
+            <!-- Continue Watching Section -->
+            <section class="mt-8 px-4 md:px-8" id="continueWatchingSection" style="display:none;">
+                <div class="flex items-center justify-between mb-4">
+                    <h2 class="text-xl font-bold flex items-center space-x-2">
+                        <i class="fa-solid fa-clock-rotate-left text-novyxGold mr-2"></i>
+                        <span>Continuer à regarder</span>
+                    </h2>
+                </div>
+                <div id="continueWatchingGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4"></div>
+            </section>
+
+            <!-- Popular Movies Section -->
+            <section class="mt-8 px-4 md:px-8">
+                <div class="flex items-center justify-between mb-4">
+                    <h2 class="text-xl font-bold flex items-center space-x-2">
+                        <i class="fa-solid fa-fire text-novyxGold mr-2"></i>
+                        <span>Films Populaires</span>
+                    </h2>
+                    <button onclick="navigateTab('movies')" class="text-xs text-novyxGold hover:underline font-semibold cursor-pointer">Voir tout</button>
+                </div>
+                <div id="popularMoviesGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4"></div>
+            </section>
+
+            <!-- Popular TV Shows Section -->
+            <section class="mt-12 px-4 md:px-8 mb-12">
+                <div class="flex items-center justify-between mb-4">
+                    <h2 class="text-xl font-bold flex items-center space-x-2">
+                        <i class="fa-solid fa-tv text-novyxGold mr-2"></i>
+                        <span>Séries Populaires</span>
+                    </h2>
+                    <button onclick="navigateTab('series')" class="text-xs text-novyxGold hover:underline font-semibold cursor-pointer">Voir tout</button>
+                </div>
+                <div id="popularSeriesGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4"></div>
+            </section>
+        </div>
+
+        <!-- View: Movies Catalog -->
+        <div id="view-movies" class="view-section hidden px-4 md:px-8 pt-6">
+            <h1 class="text-2xl font-bold mb-6 flex items-center"><i class="fa-solid fa-film text-novyxGold mr-3"></i> Tous les Films</h1>
+            <div id="allMoviesGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4"></div>
+        </div>
+
+        <!-- View: Series Catalog -->
+        <div id="view-series" class="view-section hidden px-4 md:px-8 pt-6">
+            <h1 class="text-2xl font-bold mb-6 flex items-center"><i class="fa-solid fa-tv text-novyxGold mr-3"></i> Toutes les Séries</h1>
+            <div id="allSeriesGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4"></div>
+        </div>
+
+        <!-- View: Favorites -->
+        <div id="view-favorites" class="view-section hidden px-4 md:px-8 pt-6">
+            <h1 class="text-2xl font-bold mb-6 flex items-center"><i class="fa-solid fa-heart text-novyxGold mr-3"></i> Mes Favoris</h1>
+            <div id="favoritesGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4"></div>
+            <div id="noFavorites" class="text-center py-20 text-gray-500 hidden">
+                <i class="fa-regular fa-heart text-5xl mb-3 text-gray-600"></i>
+                <p>Aucun favori pour le moment.</p>
+            </div>
+        </div>
+
+        <!-- View: History -->
+        <div id="view-history" class="view-section hidden px-4 md:px-8 pt-6">
+            <h1 class="text-2xl font-bold mb-6 flex items-center"><i class="fa-solid fa-clock-rotate-left text-novyxGold mr-3"></i> Historique de visionnage</h1>
+            <div id="historyGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4"></div>
+            <div id="noHistory" class="text-center py-20 text-gray-500 hidden">
+                <i class="fa-solid fa-clock text-5xl mb-3 text-gray-600"></i>
+                <p>Votre historique est vide.</p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Search Modal -->
+    <div id="searchModal" class="fixed inset-0 bg-black/80 z-50 hidden backdrop-blur-md flex flex-col p-4 md:p-12">
+        <div class="max-w-3xl w-full mx-auto flex flex-col h-full">
+            <div class="flex items-center justify-between mb-6">
+                <div class="relative flex-1 mr-4">
+                    <input type="text" id="modalSearchInput" placeholder="Rechercher un film ou une série..." oninput="performSearch(this.value)" class="w-full bg-[#151922] border border-white/10 rounded-xl py-3.5 pl-12 pr-4 text-white placeholder-gray-500 focus:outline-none focus:border-novyxGold text-lg shadow-inner">
+                    <i class="fa-solid fa-magnifying-glass absolute left-4 top-4 text-novyxGold text-lg"></i>
+                </div>
+                <button onclick="closeSearchModal()" class="w-12 h-12 rounded-xl bg-white/5 hover:bg-white/10 flex items-center justify-center text-white text-xl cursor-pointer">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div id="searchResultsContainer" class="flex-1 overflow-y-auto grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 pr-2">
+                <div class="col-span-full text-center py-20 text-gray-500">
+                    Commencez à taper pour rechercher...
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Details Modal -->
+    <div id="detailsModal" class="fixed inset-0 bg-black/80 z-50 hidden backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto">
+        <div class="bg-[#12151d] border border-white/10 rounded-2xl max-w-2xl w-full overflow-hidden shadow-2xl relative my-8">
+            <button onclick="closeDetailsModal()" class="absolute top-4 right-4 z-20 w-10 h-10 rounded-full bg-black/60 hover:bg-black text-white flex items-center justify-center transition cursor-pointer">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+            <div id="detailsBackdrop" class="relative w-full h-64 bg-cover bg-center">
+                <div class="absolute inset-0 bg-gradient-to-t from-[#12151d] via-[#12151d]/50 to-transparent"></div>
+            </div>
+            <div class="p-6 -mt-16 relative z-10 space-y-4">
+                <div class="flex items-end space-x-4">
+                    <img id="detailsPoster" src="" class="w-28 h-40 object-cover rounded-xl shadow-xl border border-white/10" alt="Poster">
+                    <div class="space-y-1 pb-2">
+                        <h2 id="detailsTitle" class="text-2xl font-bold text-white"></h2>
+                        <div class="flex items-center space-x-3 text-sm text-gray-300">
+                            <span id="detailsRating" class="text-novyxGold font-bold flex items-center"><i class="fa-solid fa-star mr-1"></i> -</span>
+                            <span id="detailsYear"></span>
+                            <span id="detailsTypeBadge" class="bg-novyxGold/20 text-novyxGold px-2 py-0.5 rounded text-xs font-semibold"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <p id="detailsOverview" class="text-gray-300 text-sm leading-relaxed"></p>
+
+                <div class="flex items-center space-x-4 pt-4 border-t border-white/10">
+                    <button id="modalWatchBtn" class="flex-1 bg-novyxGold hover:bg-novyxGoldHover text-novyxDark py-3.5 rounded-xl font-bold transition flex items-center justify-center space-x-2 shadow-lg shadow-novyxGold/20 cursor-pointer">
+                        <i class="fa-solid fa-play"></i>
+                        <span>Regarder</span>
+                    </button>
+                    <button id="modalFavoriteBtn" onclick="toggleCurrentFavorite()" class="w-12 h-12 rounded-xl bg-white/5 hover:bg-white/10 text-white flex items-center justify-center transition border border-white/10 cursor-pointer">
+                        <i class="fa-regular fa-heart text-lg" id="modalFavIcon"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Redirection Ad Modal (Demande de regarder la pub puis redirection Streamzo) -->
+    <div id="adModal" class="fixed inset-0 bg-black/90 z-50 hidden backdrop-blur-lg flex items-center justify-center p-4">
+        <div class="bg-[#151922] border border-white/10 rounded-2xl max-w-md w-full p-6 text-center space-y-6 shadow-2xl relative">
+            <div class="w-16 h-16 bg-novyxGold/10 text-novyxGold rounded-full flex items-center justify-center mx-auto text-2xl border border-novyxGold/30">
+                <i class="fa-solid fa-film"></i>
+            </div>
+            <div class="space-y-2">
+                <h3 class="text-xl font-bold text-white">Prêt à regarder votre vidéo ?</h3>
+                <p class="text-sm text-gray-400">Veuillez patienter 3 secondes pour valider la publicité, puis cliquez sur le bouton pour lancer le film sur Streamzo.</p>
+            </div>
+            <!-- Timer Countdown Box -->
+            <div class="bg-[#0b0d12] border border-white/10 rounded-xl p-4 flex items-center justify-between">
+                <span class="text-sm text-gray-300 font-medium">Chargement de la vidéo :</span>
+                <span id="adTimerCount" class="text-2xl font-extrabold text-novyxGold">3s</span>
+            </div>
+            <button id="skipAdBtn" disabled class="w-full py-3.5 rounded-xl bg-gray-700 text-gray-400 font-bold transition cursor-not-allowed">
+                Patientez...
+            </button>
+        </div>
+    </div>
+
+    <!-- JavaScript Application Logic -->
     <script>
-        let targetUrl = '';
+        const TMDB_API_KEY = "8265bd1679663a7ea12ac168da84d2e8";
+        const TMDB_BASE_URL = "https://api.themoviedb.org/3";
+        const IMG_BASE = "https://image.tmdb.org/t/p/original";
+        const IMG_POSTER = "https://image.tmdb.org/t/p/w500";
+        
+        const STREAMZO_BASE = "https://streamzo.fr"; // Redirection vers Streamzo
 
-        function toggleMenu() {
-            document.getElementById('sideMenu').classList.toggle('active');
-            document.getElementById('menuOverlay').classList.toggle('active');
+        let heroMovies = [];
+        let currentHeroIndex = 0;
+        let heroInterval = null;
+        let activeMedia = null;
+
+        let favorites = JSON.parse(localStorage.getItem('novyx_favorites') || "[]");
+        let history = JSON.parse(localStorage.getItem('novyx_history') || "[]");
+
+        window.onload = function() {
+            fetchHeroTrending();
+            fetchPopularCatalogs();
+            renderContinueWatching();
+            renderFavorites();
+            renderHistory();
+        };
+
+        function toggleSidebar() {
+            const drawer = document.getElementById('sidebarDrawer');
+            const overlay = document.getElementById('sidebarOverlay');
+            if (drawer.classList.contains('-translate-x-full')) {
+                drawer.classList.remove('-translate-x-full');
+                overlay.classList.remove('hidden');
+            } else {
+                drawer.classList.add('-translate-x-full');
+                overlay.classList.add('hidden');
+            }
         }
 
-        function playMovie(title, url) {
-            targetUrl = url;
-            document.getElementById('modalMovieTitle').innerText = title;
-            document.getElementById('playModal').style.display = 'flex';
+        function navigateTab(tabName) {
+            document.querySelectorAll('.view-section').forEach(el => el.classList.add('hidden'));
+            document.getElementById(`view-${tabName}`).classList.remove('hidden');
+
+            ['home', 'movies', 'series', 'favorites', 'history'].forEach(t => {
+                const btn = document.getElementById(`nav-${t}`);
+                if (btn) {
+                    if (t === tabName) {
+                        btn.className = "w-full flex items-center space-x-4 px-4 py-3 rounded-xl font-medium text-left bg-novyxGold text-novyxDark transition shadow-md";
+                    } else {
+                        btn.className = "w-full flex items-center space-x-4 px-4 py-3 rounded-xl font-medium text-left text-gray-300 hover:bg-white/5 hover:text-white transition";
+                    }
+                }
+            });
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        function confirmRedirect() {
-            if (targetUrl) {
-                window.open(targetUrl, '_blank');
-                document.getElementById('playModal').style.display = 'none';
+        async function fetchHeroTrending() {
+            try {
+                const res = await fetch(`${TMDB_BASE_URL}/trending/all/day?api_key=${TMDB_API_KEY}&language=fr-FR`);
+                const data = await res.json();
+                heroMovies = data.results.slice(0, 5);
+                if (heroMovies.length > 0) {
+                    updateHeroBanner(0);
+                    startHeroCarousel();
+                }
+            } catch (err) {
+                console.error("Error fetching hero trending:", err);
+            }
+        }
+
+        function updateHeroBanner(index) {
+            currentHeroIndex = index;
+            const item = heroMovies[index];
+            if (!item) return;
+
+            const isMovie = item.media_type === 'movie' || item.title;
+            const title = item.title || item.name;
+            const releaseDate = item.release_date || item.first_air_date || "";
+            const year = releaseDate ? releaseDate.split('-')[0] : "2026";
+            const rating = item.vote_average ? item.vote_average.toFixed(1) : "8.5";
+            const backdropUrl = item.backdrop_path ? `${IMG_BASE}${item.backdrop_path}` : 'https://placehold.co/1920x1080/151922/f3c65d?text=Novyx';
+
+            const container = document.getElementById('heroBannerContainer');
+            container.style.backgroundImage = `url('${backdropUrl}')`;
+            
+            document.getElementById('heroTitle').innerText = title;
+            document.getElementById('heroRating').innerHTML = `<i class="fa-solid fa-star mr-1.5 text-novyxGold"></i> ${rating}`;
+            document.getElementById('heroYear').innerText = year;
+            document.getElementById('heroDuration').innerText = isMovie ? "1h 55min" : "Série";
+            document.getElementById('heroGenre').innerText = isMovie ? "Film" : "Série TV";
+            document.getElementById('heroOverview').innerText = item.overview || "Aucune description disponible pour le moment.";
+
+            const mediaObj = {
+                id: item.id,
+                media_type: isMovie ? 'movie' : 'tv',
+                title: title,
+                poster_path: item.poster_path,
+                backdrop_path: item.backdrop_path,
+                vote_average: item.vote_average,
+                release_date: releaseDate,
+                overview: item.overview
+            };
+
+            document.getElementById('heroWatchBtn').onclick = () => triggerWatch(mediaObj);
+            document.getElementById('heroDetailsBtn').onclick = () => openDetailsModal(mediaObj);
+
+            const dotsContainer = document.getElementById('heroDots');
+            dotsContainer.innerHTML = heroMovies.map((_, i) => `
+                <span onclick="setHeroIndex(${i})" class="cursor-pointer transition-all duration-300 ${i === index ? 'w-8 h-2 rounded-full bg-novyxGold' : 'w-2 h-2 rounded-full bg-white/40 hover:bg-white'}"></span>
+            `).join('');
+        }
+
+        function setHeroIndex(index) {
+            clearInterval(heroInterval);
+            updateHeroBanner(index);
+            startHeroCarousel();
+        }
+
+        function startHeroCarousel() {
+            heroInterval = setInterval(() => {
+                currentHeroIndex = (currentHeroIndex + 1) % heroMovies.length;
+                updateHeroBanner(currentHeroIndex);
+            }, 6000);
+        }
+
+        async function fetchPopularCatalogs() {
+            try {
+                const resMovies = await fetch(`${TMDB_BASE_URL}/movie/popular?api_key=${TMDB_API_KEY}&language=fr-FR`);
+                const dataMovies = await resMovies.json();
+                renderMediaGrid(dataMovies.results, 'popularMoviesGrid');
+                renderMediaGrid(dataMovies.results, 'allMoviesGrid', 'movie');
+
+                const resSeries = await fetch(`${TMDB_BASE_URL}/tv/popular?api_key=${TMDB_API_KEY}&language=fr-FR`);
+                const dataSeries = await resSeries.json();
+                renderMediaGrid(dataSeries.results, 'popularSeriesGrid', 'tv');
+                renderMediaGrid(dataSeries.results, 'allSeriesGrid', 'tv');
+            } catch (err) {
+                console.error("Error fetching catalogs:", err);
+            }
+        }
+
+        function renderMediaGrid(items, containerId, forcedType = null) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+
+            container.innerHTML = items.map(item => {
+                const isMovie = forcedType ? forcedType === 'movie' : (item.title !== undefined);
+                const title = item.title || item.name;
+                const poster = item.poster_path ? `${IMG_POSTER}${item.poster_path}` : 'https://placehold.co/500x750/151922/ffffff?text=Novyx';
+                const rating = item.vote_average ? item.vote_average.toFixed(1) : "7.0";
+                const year = (item.release_date || item.first_air_date || "").split('-')[0] || "";
+
+                const mediaObj = {
+                    id: item.id,
+                    media_type: isMovie ? 'movie' : 'tv',
+                    title: title,
+                    poster_path: item.poster_path,
+                    backdrop_path: item.backdrop_path,
+                    vote_average: item.vote_average,
+                    release_date: item.release_date || item.first_air_date,
+                    overview: item.overview
+                };
+
+                return `
+                    <div class="group relative bg-[#151922] rounded-xl overflow-hidden border border-white/5 hover:border-novyxGold/50 transition duration-300 shadow-md cursor-pointer flex flex-col" onclick='openDetailsModelSafe(${JSON.stringify(mediaObj)})'>
+                        <div class="relative aspect-[2/3] w-full overflow-hidden bg-gray-900">
+                            <img src="${poster}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" alt="${title}" loading="lazy">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent opacity-0 group-hover:opacity-100 transition flex items-end p-3">
+                                <button onclick="event.stopPropagation(); triggerWatch(${JSON.stringify(mediaObj).replace(/"/g, '&quot;')})" class="w-full bg-novyxGold text-novyxDark py-2 rounded-lg font-bold text-sm flex items-center justify-center space-x-2 shadow-lg cursor-pointer">
+                                    <i class="fa-solid fa-play"></i>
+                                    <span>Regarder</span>
+                                </button>
+                            </div>
+                            <div class="absolute top-2 right-2 bg-black/60 backdrop-blur-md px-2 py-0.5 rounded text-xs font-bold text-novyxGold flex items-center">
+                                <i class="fa-solid fa-star mr-1"></i> ${rating}
+                            </div>
+                        </div>
+                        <div class="p-3 flex-1 flex flex-col justify-between">
+                            <h3 class="font-bold text-sm text-white line-clamp-1 group-hover:text-novyxGold transition">${title}</h3>
+                            <div class="flex items-center justify-between text-xs text-gray-400 mt-1">
+                                <span>${year}</span>
+                                <span class="uppercase tracking-widest text-[10px] bg-white/5 px-1.5 py-0.5 rounded">${isMovie ? 'Film' : 'Série'}</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function openDetailsModelSafe(media) {
+            openDetailsModal(media);
+        }
+
+        function openDetailsModal(media) {
+            activeMedia = media;
+            const isMovie = media.media_type === 'movie';
+
+            document.getElementById('detailsBackdrop').style.backgroundImage = `url('${media.backdrop_path ? IMG_BASE + media.backdrop_path : IMG_POSTER + media.poster_path}')`;
+            document.getElementById('detailsPoster').src = media.poster_path ? `${IMG_POSTER}${media.poster_path}` : 'https://placehold.co/500x750/151922/ffffff?text=Novyx';
+            document.getElementById('detailsTitle').innerText = media.title;
+            document.getElementById('detailsRating').innerHTML = `<i class="fa-solid fa-star mr-1"></i> ${media.vote_average ? media.vote_average.toFixed(1) : '8.0'}`;
+            document.getElementById('detailsYear').innerText = (media.release_date || "").split('-')[0] || "2026";
+            document.getElementById('detailsTypeBadge').innerText = isMovie ? "Film" : "Série TV";
+            document.getElementById('detailsOverview').innerText = media.overview || "Aucun synopsis disponible.";
+
+            updateFavoriteModalIcon();
+
+            document.getElementById('modalWatchBtn').onclick = () => {
+                closeDetailsModal();
+                triggerWatch(activeMedia);
+            };
+
+            document.getElementById('detailsModal').classList.remove('hidden');
+        }
+
+        function closeDetailsModal() {
+            document.getElementById('detailsModal').classList.add('hidden');
+        }
+
+        // Déclenchement de la pub et redirection vers Streamzo
+        function triggerWatch(media) {
+            activeMedia = media;
+            addToHistory(media);
+            showAdModal();
+        }
+
+        function showAdModal() {
+            const adModal = document.getElementById('adModal');
+            const timerCount = document.getElementById('adTimerCount');
+            const skipBtn = document.getElementById('skipAdBtn');
+
+            adModal.classList.remove('hidden');
+            let timeLeft = 3;
+            timerCount.innerText = `${timeLeft}s`;
+            skipBtn.disabled = true;
+            skipBtn.className = "w-full py-3.5 rounded-xl bg-gray-700 text-gray-400 font-bold transition cursor-not-allowed";
+            skipBtn.innerText = `Patientez (${timeLeft}s)...`;
+
+            const countdown = setInterval(() => {
+                timeLeft--;
+                if (timeLeft > 0) {
+                    timerCount.innerText = `${timeLeft}s`;
+                    skipBtn.innerText = `Patientez (${timeLeft}s)...`;
+                } else {
+                    clearInterval(countdown);
+                    timerCount.innerText = "Prêt !";
+                    skipBtn.disabled = false;
+                    skipBtn.className = "w-full py-3.5 rounded-xl bg-novyxGold hover:bg-novyxGoldHover text-novyxDark font-bold transition shadow-lg shadow-novyxGold/25 cursor-pointer";
+                    skipBtn.innerText = "Accéder à la vidéo sur Streamzo ➔";
+                    
+                    // Au clic, on redirige vers Streamzo
+                    skipBtn.onclick = () => {
+                        adModal.classList.add('hidden');
+                        window.open(STREAMZO_BASE, '_blank');
+                    };
+                }
+            }, 1000);
+        }
+
+        function toggleCurrentFavorite() {
+            if (!activeMedia) return;
+            const index = favorites.findIndex(f => f.id === activeMedia.id);
+            if (index > -1) {
+                favorites.splice(index, 1);
+            } else {
+                favorites.push(activeMedia);
+            }
+            localStorage.setItem('novyx_favorites', JSON.stringify(favorites));
+            updateFavoriteModalIcon();
+            renderFavorites();
+        }
+
+        function updateFavoriteModalIcon() {
+            if (!activeMedia) return;
+            const isFav = favorites.some(f => f.id === activeMedia.id);
+            const icon = document.getElementById('modalFavIcon');
+            if (isFav) {
+                icon.className = "fa-solid fa-heart text-lg text-red-500";
+            } else {
+                icon.className = "fa-regular fa-heart text-lg";
+            }
+        }
+
+        function renderFavorites() {
+            const container = document.getElementById('favoritesGrid');
+            const empty = document.getElementById('noFavorites');
+            if (favorites.length === 0) {
+                container.innerHTML = "";
+                empty.classList.remove('hidden');
+                return;
+            }
+            empty.classList.add('hidden');
+            renderMediaGrid(favorites, 'favoritesGrid');
+        }
+
+        function addToHistory(media) {
+            history = history.filter(h => h.id !== media.id);
+            history.unshift(media);
+            if (history.length > 20) history.pop();
+            localStorage.setItem('novyx_history', JSON.stringify(history));
+            renderHistory();
+            renderContinueWatching();
+        }
+
+        function renderHistory() {
+            const container = document.getElementById('historyGrid');
+            const empty = document.getElementById('noHistory');
+            if (history.length === 0) {
+                container.innerHTML = "";
+                empty.classList.remove('hidden');
+                return;
+            }
+            empty.classList.add('hidden');
+            renderMediaGrid(history, 'historyGrid');
+        }
+
+        function renderContinueWatching() {
+            const section = document.getElementById('continueWatchingSection');
+            const container = document.getElementById('continueWatchingGrid');
+            if (history.length === 0) {
+                section.style.display = 'none';
+                return;
+            }
+            section.style.display = 'block';
+            renderMediaGrid(history.slice(0, 5), 'continueWatchingGrid');
+        }
+
+        function openSearchModal() {
+            document.getElementById('searchModal').classList.remove('hidden');
+            setTimeout(() => document.getElementById('modalSearchInput').focus(), 100);
+        }
+
+        function closeSearchModal() {
+            document.getElementById('searchModal').classList.add('hidden');
+        }
+
+        async function performSearch(query) {
+            const container = document.getElementById('searchResultsContainer');
+            if (!query || query.trim().length === 0) {
+                container.innerHTML = '<div class="col-span-full text-center py-20 text-gray-500">Commencez à taper pour rechercher...</div>';
+                return;
+            }
+
+            try {
+                const res = await fetch(`${TMDB_BASE_URL}/search/multi?api_key=${TMDB_API_KEY}&language=fr-FR&query=${encodeURIComponent(query)}`);
+                const data = await res.json();
+                const results = (data.results || []).filter(item => item.media_type === 'movie' || item.media_type === 'tv');
+
+                if (results.length === 0) {
+                    container.innerHTML = '<div class="col-span-full text-center py-20 text-gray-500">Aucun résultat trouvé.</div>';
+                    return;
+                }
+
+                container.innerHTML = results.map(item => {
+                    const isMovie = item.media_type === 'movie';
+                    const title = item.title || item.name;
+                    const poster = item.poster_path ? `${IMG_POSTER}${item.poster_path}` : 'https://placehold.co/500x750/151922/ffffff?text=Novyx';
+
+                    const mediaObj = {
+                        id: item.id,
+                        media_type: item.media_type,
+                        title: title,
+                        poster_path: item.poster_path,
+                        backdrop_path: item.backdrop_path,
+                        vote_average: item.vote_average,
+                        release_date: item.release_date || item.first_air_date,
+                        overview: item.overview
+                    };
+
+                    return `
+                        <div class="bg-[#151922] rounded-xl overflow-hidden border border-white/5 hover:border-novyxGold transition cursor-pointer flex flex-col" onclick="closeSearchModal(); openDetailsModelSafe(${JSON.stringify(mediaObj).replace(/"/g, '&quot;')})">
+                            <div class="aspect-[2/3] w-full bg-gray-900 relative">
+                                <img src="${poster}" class="w-full h-full object-cover" alt="${title}" loading="lazy">
+                            </div>
+                            <div class="p-2.5">
+                                <h4 class="font-bold text-sm text-white line-clamp-1">${title}</h4>
+                                <span class="text-xs text-gray-400 uppercase">${isMovie ? 'Film' : 'Série'}</span>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            } catch (err) {
+                console.error("Search error:", err);
+            }
+        }
+
+        function handleSidebarSearch(e) {
+            if (e.key === 'Enter') {
+                const query = e.target.value;
+                if (query) {
+                    toggleSidebar();
+                    openSearchModal();
+                    document.getElementById('modalSearchInput').value = query;
+                    performSearch(query);
+                }
             }
         }
     </script>
