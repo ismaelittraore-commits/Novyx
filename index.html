@@ -1,205 +1,591 @@
 <!DOCTYPE html>
-<html lang="fr" class="dark">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Novyx - Streaming Direct</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    colors: {
-                        novyxDark: '#0b0d12',
-                        novyxCard: '#151922',
-                        novyxGold: '#f3c65d',
-                        novyxGoldHover: '#d4aa48',
-                    }
-                }
-            }
-        }
-    </script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>Novyx — Films & Séries en Streaming HD</title>
+
+    <!-- SCRIPT POPUNDER ADSTERRA -->
+    <script type="text/javascript" src="//pl26149405.pvourt.com/97/58/b0/9758b0f49a21d1dcbcf1d29e3dd1d293.js"></script>
+
+    <!-- POLICES GOOGLE (Style Streamzo) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap');
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #0b0d12; color: #ffffff; overflow-x: hidden; }
-        ::-webkit-scrollbar { width: 6px; height: 6px; }
-        ::-webkit-scrollbar-track { background: #0b0d12; }
-        ::-webkit-scrollbar-thumb { background: #252a37; border-radius: 3px; }
+        :root {
+            --bg-main: #0c0d10;
+            --bg-card: #14151a;
+            --gold: #e5be65;
+            --gold-hover: #d4ab4f;
+            --text-light: #e1e1e6;
+            --text-dim: #8c8d96;
+            --btn-dark: #1e2026;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-light);
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* HEADER / BARRE DE NAVIGATION */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 20px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 50;
+            background: linear-gradient(180deg, rgba(12,13,16,0.95) 0%, rgba(12,13,16,0) 100%);
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            color: var(--gold);
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        .logo-text {
+            font-size: 22px;
+            font-weight: 800;
+            color: #ffffff;
+            letter-spacing: -0.5px;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .icon-btn {
+            background: none;
+            border: none;
+            color: #ffffff;
+            font-size: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+        }
+
+        /* MENU LATÉRAL COULISSANT */
+        .side-menu {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 82%;
+            max-width: 340px;
+            height: 100%;
+            background-color: #111216;
+            z-index: 100;
+            transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            padding: 24px 20px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: -10px 0 30px rgba(0,0,0,0.8);
+        }
+
+        .side-menu.active {
+            right: 0;
+        }
+
+        .menu-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(4px);
+            z-index: 90;
+            display: none;
+        }
+
+        .menu-overlay.active {
+            display: block;
+        }
+
+        .menu-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .close-menu-btn {
+            background: rgba(255,255,255,0.08);
+            border: none;
+            color: #fff;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            font-size: 18px;
+            cursor: pointer;
+        }
+
+        .search-box {
+            position: relative;
+            margin-bottom: 24px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 14px 48px 14px 16px;
+            background: #1a1b22;
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 25px;
+            color: #fff;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .search-box .search-btn {
+            position: absolute;
+            right: 4px;
+            top: 4px;
+            width: 38px;
+            height: 38px;
+            background: var(--gold);
+            border: none;
+            border-radius: 50%;
+            color: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .menu-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .menu-item {
+            padding: 14px 18px;
+            color: var(--text-dim);
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 500;
+            border-radius: 12px;
+            transition: all 0.2s;
+        }
+
+        .menu-item.active {
+            background: #22201c;
+            color: #ffffff;
+            border-left: 3px solid var(--gold);
+            font-weight: 600;
+        }
+
+        /* SECTION À LA UNE (HERO BANNER) */
+        .hero {
+            position: relative;
+            min-height: 80vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 0 20px 30px;
+            background: linear-gradient(180deg, rgba(12,13,16,0.2) 0%, rgba(12,13,16,0.9) 75%, #0c0d10 100%), 
+                        url('https://images.unsplash.com/photo-1534447677768-be436bb09401?q=80&w=1000') center/cover no-repeat;
+        }
+
+        .badge-a-la-une {
+            color: var(--gold);
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+        }
+
+        .hero-title {
+            font-family: 'Cinzel', serif;
+            font-size: 32px;
+            line-height: 1.15;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 12px;
+            max-width: 90%;
+        }
+
+        .hero-meta {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 13px;
+            color: var(--text-dim);
+            margin-bottom: 16px;
+            font-weight: 500;
+        }
+
+        .rating {
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-weight: 700;
+        }
+
+        .rating-star {
+            color: var(--gold);
+        }
+
+        .hero-description {
+            font-size: 13px;
+            line-height: 1.5;
+            color: var(--text-dim);
+            margin-bottom: 24px;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .btn-primary {
+            flex: 1;
+            background: var(--gold);
+            color: #0d0e11;
+            border: none;
+            padding: 14px 20px;
+            border-radius: 25px;
+            font-weight: 700;
+            font-size: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(229, 190, 101, 0.2);
+        }
+
+        .btn-secondary {
+            flex: 1;
+            background: var(--btn-dark);
+            color: #ffffff;
+            border: 1px solid rgba(255,255,255,0.08);
+            padding: 14px 20px;
+            border-radius: 25px;
+            font-weight: 600;
+            font-size: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+
+        /* DOTS CARROUSEL */
+        .carousel-dots {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.2);
+        }
+
+        .dot.active {
+            width: 32px;
+            height: 8px;
+            border-radius: 4px;
+            background: var(--gold);
+        }
+
+        /* SECTION CONTINUER À REGARDER */
+        .section {
+            padding: 24px 0 24px 20px;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-right: 20px;
+            margin-bottom: 16px;
+        }
+
+        .section-title-box {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .clock-icon {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: rgba(229, 190, 101, 0.1);
+            border: 1px solid rgba(229, 190, 101, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--gold);
+            font-size: 13px;
+        }
+
+        .section-title {
+            font-family: 'Cinzel', serif;
+            font-size: 18px;
+            font-weight: 600;
+            color: #ffffff;
+        }
+
+        .see-all {
+            color: var(--text-dim);
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .scroll-cards {
+            display: flex;
+            gap: 14px;
+            overflow-x: auto;
+            scroll-behavior: smooth;
+            padding-right: 20px;
+            scrollbar-width: none;
+        }
+
+        .scroll-cards::-webkit-scrollbar {
+            display: none;
+        }
+
+        .card {
+            flex: 0 0 140px;
+            border-radius: 12px;
+            overflow: hidden;
+            background: var(--bg-card);
+            cursor: pointer;
+        }
+
+        .card img {
+            width: 100%;
+            height: 190px;
+            object-fit: cover;
+            display: block;
+            border-radius: 12px;
+        }
+
+        /* POPUP DE REDIRECTION */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.85);
+            backdrop-filter: blur(8px);
+            z-index: 200;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .modal-content {
+            background: #14151a;
+            border: 1px solid rgba(229, 190, 101, 0.2);
+            border-radius: 20px;
+            padding: 28px 20px;
+            text-align: center;
+            max-width: 380px;
+            width: 100%;
+        }
+
+        .modal-title {
+            font-family: 'Cinzel', serif;
+            font-size: 20px;
+            color: #ffffff;
+            margin-bottom: 12px;
+        }
+
+        .modal-text {
+            font-size: 14px;
+            color: var(--text-dim);
+            line-height: 1.5;
+            margin-bottom: 24px;
+        }
+
+        .modal-btn {
+            background: var(--gold);
+            color: #000;
+            border: none;
+            padding: 14px 24px;
+            border-radius: 25px;
+            font-weight: 700;
+            font-size: 15px;
+            width: 100%;
+            cursor: pointer;
+        }
     </style>
 </head>
-<body class="bg-novyxDark text-white min-h-screen flex flex-col">
+<body>
 
-    <!-- Header Bar -->
-    <header class="fixed top-0 left-0 right-0 z-40 bg-novyxDark/80 backdrop-blur-md border-b border-white/5 px-4 md:px-8 py-3 flex items-center justify-between">
-        <div class="flex items-center space-x-3">
-            <button onclick="toggleSidebar()" class="text-white hover:text-novyxGold transition p-2 focus:outline-none text-xl">
-                <i class="fa-solid fa-bars"></i>
-            </button>
-            <div class="flex items-center space-x-2 cursor-pointer" onclick="navigateTab('home')">
-                <div class="w-8 h-8 rounded bg-gradient-to-br from-novyxGold to-amber-600 flex items-center justify-center font-bold text-novyxDark text-lg shadow-lg shadow-novyxGold/20">N</div>
-                <span class="text-xl font-bold tracking-wider text-white">Novyx</span>
-            </div>
-        </div>
-        <div class="flex items-center space-x-3">
-            <button onclick="openSearchModal()" class="w-10 h-10 rounded-full bg-white/5 hover:bg-white/10 flex items-center justify-center text-white transition">
-                <i class="fa-solid fa-magnifying-glass text-novyxGold"></i>
-            </button>
+    <!-- EN-TÊTE NOVYX -->
+    <header>
+        <a href="#" class="logo-container">
+            <span class="logo-icon">S</span>
+            <span class="logo-text">Novyx</span>
+        </a>
+        <div class="header-actions">
+            <button class="icon-btn" onclick="toggleMenu()">🔍</button>
+            <button class="icon-btn" onclick="toggleMenu()">☰</button>
         </div>
     </header>
 
-    <!-- Sidebar Menu -->
-    <div id="sidebarOverlay" class="fixed inset-0 bg-black/70 z-50 hidden backdrop-blur-sm transition-opacity" onclick="toggleSidebar()"></div>
-    <div id="sidebarDrawer" class="fixed top-0 left-0 bottom-0 w-80 bg-[#12151d] z-50 transform -translate-x-full transition-transform duration-300 ease-in-out border-r border-white/10 flex flex-col shadow-2xl">
-        <div class="p-6 flex items-center justify-between border-b border-white/10">
-            <div class="flex items-center space-x-2">
-                <div class="w-8 h-8 rounded bg-gradient-to-br from-novyxGold to-amber-600 flex items-center justify-center font-bold text-novyxDark text-lg">N</div>
-                <span class="text-xl font-bold tracking-wider text-white">Novyx</span>
-            </div>
-            <button onclick="toggleSidebar()" class="text-gray-400 hover:text-white text-xl p-2"><i class="fa-solid fa-xmark"></i></button>
+    <!-- MENU COULISSANT -->
+    <div class="menu-overlay" id="menuOverlay" onclick="toggleMenu()"></div>
+    <div class="side-menu" id="sideMenu">
+        <div class="menu-header">
+            <a href="#" class="logo-container">
+                <span class="logo-icon">S</span>
+                <span class="logo-text">Novyx</span>
+            </a>
+            <button class="close-menu-btn" onclick="toggleMenu()">✕</button>
         </div>
-        <div class="flex-1 py-4 px-3 space-y-1 overflow-y-auto">
-            <button onclick="navigateTab('home'); toggleSidebar();" id="nav-home" class="w-full flex items-center space-x-4 px-4 py-3 rounded-xl font-medium text-left bg-novyxGold text-novyxDark transition shadow-md">
-                <i class="fa-solid fa-house text-lg w-6"></i><span>Accueil</span>
-            </button>
-            <button onclick="navigateTab('movies'); toggleSidebar();" id="nav-movies" class="w-full flex items-center space-x-4 px-4 py-3 rounded-xl font-medium text-left text-gray-300 hover:bg-white/5 hover:text-white transition">
-                <i class="fa-solid fa-film text-lg w-6"></i><span>Films</span>
-            </button>
-            <button onclick="navigateTab('series'); toggleSidebar();" id="nav-series" class="w-full flex items-center space-x-4 px-4 py-3 rounded-xl font-medium text-left text-gray-300 hover:bg-white/5 hover:text-white transition">
-                <i class="fa-solid fa-tv text-lg w-6"></i><span>Séries</span>
-            </button>
+
+        <div class="search-box">
+            <input type="text" placeholder="Rechercher un film, une série...">
+            <button class="search-btn">🔍</button>
         </div>
-        <div class="p-4 border-t border-white/10 text-xs text-center text-gray-500">Novyx • Direct Streamzo</div>
+
+        <nav class="menu-nav">
+            <a href="#" class="menu-item active">Accueil</a>
+            <a href="#" class="menu-item">Films</a>
+            <a href="#" class="menu-item">Séries</a>
+            <a href="#" class="menu-item">Favoris</a>
+            <a href="#" class="menu-item">Historique</a>
+        </nav>
     </div>
 
-    <!-- Main Container -->
-    <main class="flex-1 pt-16 pb-20">
-        <div id="view-home" class="view-section">
-            <div class="relative w-full h-[75vh] md:h-[80vh] flex items-end" style="background-image: url('https://image.tmdb.org/t/p/original/pB8BM7pdSp6B6Ih7QZ4DrQ3PmJK.jpg'); background-size: cover; background-position: center;">
-                <div class="absolute inset-0 bg-gradient-to-t from-[#0b0d12] via-[#0b0d12]/40 to-transparent"></div>
-                <div class="relative z-10 p-6 md:p-12 max-w-3xl space-y-4">
-                    <div class="inline-block text-xs uppercase tracking-widest text-novyxGold font-bold px-3 py-1 rounded bg-novyxGold/10 border border-novyxGold/30">À la une</div>
-                    <h1 class="text-3xl md:text-5xl font-extrabold tracking-tight text-white leading-tight">Interstellar</h1>
-                    <p class="text-gray-300 text-sm md:text-base line-clamp-3 leading-relaxed">Les aventures d'un groupe d'explorateurs qui utilisent une faille dans l'espace-temps...</p>
-                    <div class="flex items-center space-x-4 pt-2">
-                        <button onclick="redirectToStreamzo({title: 'Interstellar', media_type: 'movie'})" class="flex items-center space-x-3 bg-novyxGold hover:bg-novyxGoldHover text-novyxDark px-7 py-3.5 rounded-full font-bold transition shadow-lg">
-                            <i class="fa-solid fa-play"></i><span>Regarder</span>
-                        </button>
-                    </div>
-                </div>
+    <!-- BANNIÈRE À LA UNE -->
+    <section class="hero">
+        <div class="badge-a-la-une">À LA UNE</div>
+        <h1 class="hero-title">Avatar Aang, le dernier maître de l'air</h1>
+        
+        <div class="hero-meta">
+            <span class="rating"><span class="rating-star">★</span> 9.1</span>
+            <span>•</span>
+            <span>2026</span>
+            <span>•</span>
+            <span>1h 39min</span>
+            <span>•</span>
+            <span>Animation</span>
+        </div>
+
+        <p class="hero-description">
+            Avatar Aang, le dernier Maître de l'Air, apprend l'existence d'un pouvoir ancestral qui pourrait sauver sa culture. Avec ses amis, il se lance dans...
+        </p>
+
+        <div class="hero-buttons">
+            <button class="btn-primary" onclick="playMovie('Avatar Aang, le dernier maître de l\'air', 'https://streamzo.fr')">
+                ▶ Regarder
+            </button>
+            <button class="btn-secondary" onclick="playMovie('Avatar Aang, le dernier maître de l\'air', 'https://streamzo.fr')">
+                ⓘ Détails
+            </button>
+        </div>
+
+        <div class="carousel-dots">
+            <div class="dot active"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+        </div>
+    </section>
+
+    <!-- SECTION CONTINUER À REGARDER -->
+    <section class="section">
+        <div class="section-header">
+            <div class="section-title-box">
+                <div class="clock-icon">🕒</div>
+                <h2 class="section-title">Continuer à regarder</h2>
             </div>
-
-            <section class="mt-8 px-4 md:px-8">
-                <h2 class="text-xl font-bold flex items-center space-x-2 mb-4"><i class="fa-solid fa-fire text-novyxGold mr-2"></i><span>Films Populaires</span></h2>
-                <div id="popularMoviesGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4"></div>
-            </section>
-
-            <section class="mt-12 px-4 md:px-8 mb-12">
-                <h2 class="text-xl font-bold flex items-center space-x-2 mb-4"><i class="fa-solid fa-tv text-novyxGold mr-2"></i><span>Séries Populaires</span></h2>
-                <div id="popularSeriesGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4"></div>
-            </section>
+            <a href="#" class="see-all">Voir tout &gt;</a>
         </div>
 
-        <div id="view-movies" class="view-section hidden px-4 md:px-8 pt-6">
-            <h1 class="text-2xl font-bold mb-6">Tous les Films</h1>
-            <div id="allMoviesGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4"></div>
-        </div>
-
-        <div id="view-series" class="view-section hidden px-4 md:px-8 pt-6">
-            <h1 class="text-2xl font-bold mb-6">Toutes les Séries</h1>
-            <div id="allSeriesGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4"></div>
-        </div>
-    </main>
-
-    <!-- Search Modal -->
-    <div id="searchModal" class="fixed inset-0 bg-black/80 z-50 hidden backdrop-blur-md flex flex-col p-4 md:p-12">
-        <div class="max-w-3xl w-full mx-auto flex flex-col h-full">
-            <div class="flex items-center justify-between mb-6">
-                <div class="relative flex-1 mr-4">
-                    <input type="text" id="modalSearchInput" placeholder="Rechercher un film ou une série..." oninput="performSearch(this.value)" class="w-full bg-[#151922] border border-white/10 rounded-xl py-3.5 pl-12 pr-4 text-white focus:outline-none focus:border-novyxGold text-lg">
-                    <i class="fa-solid fa-magnifying-glass absolute left-4 top-4 text-novyxGold text-lg"></i>
-                </div>
-                <button onclick="closeSearchModal()" class="w-12 h-12 rounded-xl bg-white/5 hover:bg-white/10 flex items-center justify-center text-white text-xl"><i class="fa-solid fa-xmark"></i></button>
+        <div class="scroll-cards">
+            <div class="card" onclick="playMovie('Black Panther', 'https://streamzo.fr')">
+                <img src="https://images.unsplash.com/photo-1568832359672-e36cf5d74f54?q=80&w=300" alt="Film">
             </div>
-            <div id="searchResultsContainer" class="flex-1 overflow-y-auto grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 pr-2"></div>
+            <div class="card" onclick="playMovie('Avengers', 'https://streamzo.fr')">
+                <img src="https://images.unsplash.com/photo-1635805737707-575885ab0820?q=80&w=300" alt="Film">
+            </div>
+            <div class="card" onclick="playMovie('Film 3', 'https://streamzo.fr')">
+                <img src="https://images.unsplash.com/photo-1536440136628-849c177e76a1?q=80&w=300" alt="Film">
+            </div>
+            <div class="card" onclick="playMovie('Film 4', 'https://streamzo.fr')">
+                <img src="https://images.unsplash.com/photo-1509198397868-475647b2a1e5?q=80&w=300" alt="Film">
+            </div>
+        </div>
+    </section>
+
+    <!-- FENÊTRE MODALE DE LECTURE -->
+    <div class="modal" id="playModal">
+        <div class="modal-content">
+            <h3 class="modal-title" id="modalMovieTitle">Lancement du Film</h3>
+            <p class="modal-text">Vous devez cliquer sur le bouton ci-dessous pour lancer la vidéo et accéder au lecteur complet sur Streamzo.</p>
+            <button class="modal-btn" onclick="confirmRedirect()">Regarder le film ➔</button>
         </div>
     </div>
 
     <script>
-        const IMG_POSTER = "https://image.tmdb.org/t/p/w500";
+        let targetUrl = '';
 
-        const moviesList = [
-            { id: 157336, media_type: 'movie', title: 'Interstellar', poster_path: '/gEU2QniE6E77NI6lCU6MxlNBvIx.jpg' },
-            { id: 278, media_type: 'movie', title: 'Les Évadés', poster_path: '/q6y0Go1tsGEmtA83GD1L12A8R3.jpg' },
-            { id: 550, media_type: 'movie', title: 'Fight Club', poster_path: '/pB8BM7pdSp6B6Ih7QZ4DrQ3PmJK.jpg' },
-            { id: 299534, media_type: 'movie', title: 'Avengers: Endgame', poster_path: '/or06FN3Dka5tukK1e9sl16pB3iy.jpg' }
-        ];
-
-        const seriesList = [
-            { id: 1396, media_type: 'tv', title: 'Breaking Bad', poster_path: '/ggFHVNu6YYI5L9pCfOacjizRGt.jpg' },
-            { id: 66732, media_type: 'tv', title: 'Stranger Things', poster_path: '/49WJfeN0moxb9IPfGn8AIqMGskD.jpg' }
-        ];
-
-        window.onload = function() {
-            renderGrid(moviesList, 'popularMoviesGrid');
-            renderGrid(moviesList, 'allMoviesGrid');
-            renderGrid(seriesList, 'popularSeriesGrid');
-            renderGrid(seriesList, 'allSeriesGrid');
-        };
-
-        function toggleSidebar() {
-            const drawer = document.getElementById('sidebarDrawer');
-            const overlay = document.getElementById('sidebarOverlay');
-            drawer.classList.toggle('-translate-x-full');
-            overlay.classList.toggle('hidden');
+        function toggleMenu() {
+            document.getElementById('sideMenu').classList.toggle('active');
+            document.getElementById('menuOverlay').classList.toggle('active');
         }
 
-        function navigateTab(tabName) {
-            document.querySelectorAll('.view-section').forEach(el => el.classList.add('hidden'));
-            document.getElementById(`view-${tabName}`).classList.remove('hidden');
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+        function playMovie(title, url) {
+            targetUrl = url;
+            document.getElementById('modalMovieTitle').innerText = title;
+            document.getElementById('playModal').style.display = 'flex';
         }
 
-        function renderGrid(items, containerId) {
-            const container = document.getElementById(containerId);
-            if (!container) return;
-            container.innerHTML = items.map(item => `
-                <div class="group bg-[#151922] rounded-xl overflow-hidden border border-white/5 hover:border-novyxGold/50 transition cursor-pointer flex flex-col" onclick='redirectToStreamzo(${JSON.stringify(item)})'>
-                    <div class="relative aspect-[2/3] w-full overflow-hidden bg-gray-900">
-                        <img src="${IMG_POSTER}${item.poster_path}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" loading="lazy">
-                        <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
-                            <span class="bg-novyxGold text-novyxDark px-4 py-2 rounded-lg font-bold text-sm"><i class="fa-solid fa-play mr-1"></i> Regarder</span>
-                        </div>
-                    </div>
-                    <div class="p-3">
-                        <h3 class="font-bold text-sm text-white line-clamp-1">${item.title}</h3>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        // Redirection directe vers la fiche du film
-        function redirectToStreamzo(media) {
-            const slug = media.title
-                .toLowerCase()
-                .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
-                .replace(/[^a-z0-9\s-]/g, "")
-                .trim()
-                .replace(/\s+/g, "-");
-
-            const type = media.media_type === 'tv' ? 'serie' : 'film';
-            window.location.href = `https://streamzo.fr/${type}/${slug}`;
-        }
-
-        function openSearchModal() { document.getElementById('searchModal').classList.remove('hidden'); }
-        function closeSearchModal() { document.getElementById('searchModal').classList.add('hidden'); }
-
-        function performSearch(query) {
-            if (!query.trim()) { document.getElementById('searchResultsContainer').innerHTML = ''; return; }
-            const all = [...moviesList, ...seriesList];
-            const results = all.filter(m => m.title.toLowerCase().includes(query.toLowerCase()));
-            renderGrid(results, 'searchResultsContainer');
+        function confirmRedirect() {
+            if (targetUrl) {
+                window.open(targetUrl, '_blank');
+                document.getElementById('playModal').style.display = 'none';
+            }
         }
     </script>
 </body>
