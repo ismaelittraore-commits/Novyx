@@ -55,7 +55,7 @@
     <header class="fixed top-0 left-0 right-0 z-40 bg-novyxDark/80 backdrop-blur-md border-b border-white/5 px-4 md:px-8 py-3 flex items-center justify-between">
         <div class="flex items-center space-x-3">
             <!-- Hamburger Menu Button -->
-            <button id="menuToggleBtn" onclick="toggleSidebar()" class="text-white hover:text-novyxGold transition p-2 focus:outline-none text-xl">
+            <button id="menuToggleBtn" onclick="toggleSidebar()" class="text-white hover:text-novyxGold transition p-2 focus:outline-none text-xl cursor-pointer">
                 <i class="fa-solid fa-bars"></i>
             </button>
             <!-- Novyx Logo -->
@@ -69,7 +69,7 @@
 
         <div class="flex items-center space-x-4">
             <!-- Quick Search trigger in header -->
-            <button onclick="openSearchModal()" class="w-10 h-10 rounded-full bg-white/5 hover:bg-white/10 flex items-center justify-center text-white transition">
+            <button onclick="openSearchModal()" class="w-10 h-10 rounded-full bg-white/5 hover:bg-white/10 flex items-center justify-center text-white transition cursor-pointer">
                 <i class="fa-solid fa-magnifying-glass text-novyxGold"></i>
             </button>
         </div>
@@ -85,7 +85,7 @@
                 </div>
                 <span class="text-xl font-bold tracking-wider text-white">Novyx</span>
             </div>
-            <button onclick="toggleSidebar()" class="text-gray-400 hover:text-white text-xl p-2">
+            <button onclick="toggleSidebar()" class="text-gray-400 hover:text-white text-xl p-2 cursor-pointer">
                 <i class="fa-solid fa-xmark"></i>
             </button>
         </div>
@@ -100,23 +100,23 @@
 
         <!-- Navigation Links -->
         <div class="flex-1 py-4 px-3 space-y-1 overflow-y-auto">
-            <button onclick="navigateTab('home'); toggleSidebar();" id="nav-home" class="w-full flex items-center space-x-4 px-4 py-3 rounded-xl font-medium text-left bg-novyxGold text-novyxDark transition shadow-md">
+            <button onclick="navigateTab('home'); toggleSidebar();" id="nav-home" class="w-full flex items-center space-x-4 px-4 py-3 rounded-xl font-medium text-left bg-novyxGold text-novyxDark transition shadow-md cursor-pointer">
                 <i class="fa-solid fa-house text-lg w-6"></i>
                 <span>Accueil</span>
             </button>
-            <button onclick="navigateTab('movies'); toggleSidebar();" id="nav-movies" class="w-full flex items-center space-x-4 px-4 py-3 rounded-xl font-medium text-left text-gray-300 hover:bg-white/5 hover:text-white transition">
+            <button onclick="navigateTab('movies'); toggleSidebar();" id="nav-movies" class="w-full flex items-center space-x-4 px-4 py-3 rounded-xl font-medium text-left text-gray-300 hover:bg-white/5 hover:text-white transition cursor-pointer">
                 <i class="fa-solid fa-film text-lg w-6"></i>
                 <span>Films</span>
             </button>
-            <button onclick="navigateTab('series'); toggleSidebar();" id="nav-series" class="w-full flex items-center space-x-4 px-4 py-3 rounded-xl font-medium text-left text-gray-300 hover:bg-white/5 hover:text-white transition">
+            <button onclick="navigateTab('series'); toggleSidebar();" id="nav-series" class="w-full flex items-center space-x-4 px-4 py-3 rounded-xl font-medium text-left text-gray-300 hover:bg-white/5 hover:text-white transition cursor-pointer">
                 <i class="fa-solid fa-tv text-lg w-6"></i>
                 <span>Séries</span>
             </button>
-            <button onclick="navigateTab('favorites'); toggleSidebar();" id="nav-favorites" class="w-full flex items-center space-x-4 px-4 py-3 rounded-xl font-medium text-left text-gray-300 hover:bg-white/5 hover:text-white transition">
+            <button onclick="navigateTab('favorites'); toggleSidebar();" id="nav-favorites" class="w-full flex items-center space-x-4 px-4 py-3 rounded-xl font-medium text-left text-gray-300 hover:bg-white/5 hover:text-white transition cursor-pointer">
                 <i class="fa-solid fa-heart text-lg w-6"></i>
                 <span>Favoris</span>
             </button>
-            <button onclick="navigateTab('history'); toggleSidebar();" id="nav-history" class="w-full flex items-center space-x-4 px-4 py-3 rounded-xl font-medium text-left text-gray-300 hover:bg-white/5 hover:text-white transition">
+            <button onclick="navigateTab('history'); toggleSidebar();" id="nav-history" class="w-full flex items-center space-x-4 px-4 py-3 rounded-xl font-medium text-left text-gray-300 hover:bg-white/5 hover:text-white transition cursor-pointer">
                 <i class="fa-solid fa-clock-rotate-left text-lg w-6"></i>
                 <span>Historique</span>
             </button>
@@ -302,19 +302,19 @@
         </div>
     </div>
 
-    <!-- Redirection Ad Modal (Demande de regarder la pub puis redirection Streamzo) -->
+    <!-- Redirection Ad Modal (Publicité obligatoire à chaque clic) -->
     <div id="adModal" class="fixed inset-0 bg-black/90 z-50 hidden backdrop-blur-lg flex items-center justify-center p-4">
         <div class="bg-[#151922] border border-white/10 rounded-2xl max-w-md w-full p-6 text-center space-y-6 shadow-2xl relative">
             <div class="w-16 h-16 bg-novyxGold/10 text-novyxGold rounded-full flex items-center justify-center mx-auto text-2xl border border-novyxGold/30">
                 <i class="fa-solid fa-film"></i>
             </div>
             <div class="space-y-2">
-                <h3 class="text-xl font-bold text-white">Prêt à regarder votre vidéo ?</h3>
-                <p class="text-sm text-gray-400">Veuillez patienter 3 secondes pour valider la publicité, puis cliquez sur le bouton pour lancer le film sur Streamzo.</p>
+                <h3 class="text-xl font-bold text-white">Publicité requise</h3>
+                <p class="text-sm text-gray-400">Veuillez regarder la publicité en cours, puis patientez 3 secondes pour accéder à la vidéo sur Streamzo.</p>
             </div>
             <!-- Timer Countdown Box -->
             <div class="bg-[#0b0d12] border border-white/10 rounded-xl p-4 flex items-center justify-between">
-                <span class="text-sm text-gray-300 font-medium">Chargement de la vidéo :</span>
+                <span class="text-sm text-gray-300 font-medium">Validation de la pub :</span>
                 <span id="adTimerCount" class="text-2xl font-extrabold text-novyxGold">3s</span>
             </div>
             <button id="skipAdBtn" disabled class="w-full py-3.5 rounded-xl bg-gray-700 text-gray-400 font-bold transition cursor-not-allowed">
@@ -368,9 +368,9 @@
                 const btn = document.getElementById(`nav-${t}`);
                 if (btn) {
                     if (t === tabName) {
-                        btn.className = "w-full flex items-center space-x-4 px-4 py-3 rounded-xl font-medium text-left bg-novyxGold text-novyxDark transition shadow-md";
+                        btn.className = "w-full flex items-center space-x-4 px-4 py-3 rounded-xl font-medium text-left bg-novyxGold text-novyxDark transition shadow-md cursor-pointer";
                     } else {
-                        btn.className = "w-full flex items-center space-x-4 px-4 py-3 rounded-xl font-medium text-left text-gray-300 hover:bg-white/5 hover:text-white transition";
+                        btn.className = "w-full flex items-center space-x-4 px-4 py-3 rounded-xl font-medium text-left text-gray-300 hover:bg-white/5 hover:text-white transition cursor-pointer";
                     }
                 }
             });
@@ -540,7 +540,7 @@
             document.getElementById('detailsModal').classList.add('hidden');
         }
 
-        // Déclenchement de la pub et redirection vers Streamzo
+        // Déclenchement systématique de la pub à chaque clic sur "Regarder"
         function triggerWatch(media) {
             activeMedia = media;
             addToHistory(media);
@@ -571,7 +571,7 @@
                     skipBtn.className = "w-full py-3.5 rounded-xl bg-novyxGold hover:bg-novyxGoldHover text-novyxDark font-bold transition shadow-lg shadow-novyxGold/25 cursor-pointer";
                     skipBtn.innerText = "Accéder à la vidéo sur Streamzo ➔";
                     
-                    // Au clic, on redirige vers Streamzo
+                    // À chaque fois que l'utilisateur clique ici après la pub, il est redirigé vers Streamzo
                     skipBtn.onclick = () => {
                         adModal.classList.add('hidden');
                         window.open(STREAMZO_BASE, '_blank');
